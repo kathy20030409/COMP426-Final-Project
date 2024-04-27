@@ -10,44 +10,6 @@ const SECRET_KEY = 'your_secret_key'; // Change this to a secure random string
 
 const db = new sqlite3.Database('./data.db');
 
-db.serialize(() => {
-  db.run(`
-    CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      username TEXT UNIQUE,
-      password TEXT
-    )
-  `);
-
-  db.run(`
-    CREATE TABLE IF NOT EXISTS user_selections (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER,
-      selection TEXT,
-      FOREIGN KEY (user_id) REFERENCES users(id)
-    )
-  `);
-
-  db.run(`CREATE TABLE items (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    description TEXT
-);
-`);
-
-  db.run(`CREATE TABLE user_items (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER NOT NULL,
-  item_id INTEGER NOT NULL,
-  quantity INTEGER DEFAULT 1,
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (item_id) REFERENCES items(id),
-  UNIQUE(user_id, item_id)
-);
-`)
-});
-
 app.use(bodyParser.json());
 
 // Function to generate JWT token
@@ -140,6 +102,32 @@ app.post('/api/selections', authenticate, (req, res) => {
     }
   );
 });
+
+
+app.post('/api/user/:userId/cart/add', (req, res) => {
+  const userId = req.params.userId;
+  const { itemId, quantity } = req.body;
+
+  db.run("INSERT INTO user_items (user_id, item_id, quantity) VALUES (?, ?, ?)", [userId, itemId, quantity], function(err) {
+      if (err) {
+          return res.status(500).json({ error: 'Failed to add item to cart' });
+      }
+      res.status(200).json({ message: 'Item added to cart successfully' });
+  });
+});
+
+// Retrieve items from a user's shopping cart
+app.get('/api/user/:userId/cart', (req, res) => {
+  const userId = req.params.userId;
+
+  db.all("SELECT items.id, items.name, items.price, items.description, user_items.quantity FROM user_items INNER JOIN items ON user_items.item_id = items.id WHERE user_items.user_id = ?", [userId], function(err, rows) {
+      if (err) {
+          return res.status(500).json({ error: 'Failed to retrieve cart items' });
+      }
+      res.status(200).json(rows);
+  });
+});
+
 
 // Start the server
 app.listen(PORT, () => {
