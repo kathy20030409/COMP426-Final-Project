@@ -104,7 +104,7 @@ app.post('/api/selections', authenticate, (req, res) => {
 });
 
 
-app.post('/api/user/:userId/cart/add', (req, res) => {
+app.post('/api/user/:userId/locations/add', (req, res) => {
   const userId = req.params.userId;
   const { itemId, quantity } = req.body;
 
@@ -117,7 +117,7 @@ app.post('/api/user/:userId/cart/add', (req, res) => {
 });
 
 // Retrieve items from a user's shopping cart
-app.get('/api/user/:userId/cart', (req, res) => {
+app.get('/api/user/:userId/locations', (req, res) => {
   const userId = req.params.userId;
 
   db.all("SELECT items.id, items.name, items.price, items.description, user_items.quantity FROM user_items INNER JOIN items ON user_items.item_id = items.id WHERE user_items.user_id = ?", [userId], function(err, rows) {
