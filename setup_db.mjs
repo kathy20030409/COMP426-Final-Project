@@ -8,7 +8,7 @@ async function initializeDatabase() {
     db.serialize(() => {
         db.run(`
     CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id INTEGER PRIMARY KEY,
       username TEXT UNIQUE,
       password TEXT
     )
@@ -23,19 +23,17 @@ async function initializeDatabase() {
     )
   `);
 
-        db.run(`CREATE TABLE items (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+        db.run(`CREATE TABLE locations (
+    id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    description TEXT
+    weather TEXT NOT NULL
 );
 `);
 
-        db.run(`CREATE TABLE user_items (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+        db.run(`CREATE TABLE user_locations (
+  id INTEGER PRIMARY KEY,
   user_id INTEGER NOT NULL,
-  item_id INTEGER NOT NULL,
-  quantity INTEGER DEFAULT 1,
+  location_id INTEGER NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (item_id) REFERENCES items(id),
   UNIQUE(user_id, item_id)
