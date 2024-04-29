@@ -23,7 +23,7 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-app.post('/api/register', async (req, res) => {
+app.post('/register', async (req, res) => {
     let ing= await User.create(req.body);
     if (ing == null) {
         res.status(400).json({ message: 'Invalid request body' });
@@ -33,7 +33,7 @@ app.post('/api/register', async (req, res) => {
 });
 
 
-app.post('/api/login', async (req, res) => {
+app.post('/login', async (req, res) => {
 
     let ing = await User.login(req.body);
 
@@ -50,7 +50,7 @@ app.post('/api/login', async (req, res) => {
     res.json(ing);
 });
 
-app.put('/api/user/:userId/account', async (req, res) => {
+app.put('/user/:userId/account', async (req, res) => {
 
     let ing = await User.changePassword(req.params.userId, req.body.password);
 
@@ -68,7 +68,7 @@ app.put('/api/user/:userId/account', async (req, res) => {
 });
 
 // Get user-specific selections
-app.get('/api/user/:userId/cart', async (req, res) => {
+app.get('/user/:userId/cart', async (req, res) => {
     const userId = req.params.userId;
     let ing = await User.getLocations(userId);
     if (ing == 400) {
@@ -81,7 +81,7 @@ app.get('/api/user/:userId/cart', async (req, res) => {
     res.json(ing);
 });
 
-app.post('/api/user/:userId/cart', async(req, res) => {
+app.post('/user/:userId/cart', async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.addLocation(userId, req.body.location);
 
@@ -95,7 +95,7 @@ app.post('/api/user/:userId/cart', async(req, res) => {
     res.json(ing);
 });
 
-app.delete('/api/user/:userId/cart', async(req, res) => {
+app.delete('/user/:userId/cart', async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.deleteLocation(userId, req.body.location);
 
@@ -109,7 +109,7 @@ app.delete('/api/user/:userId/cart', async(req, res) => {
     res.json(ing);
 });
 
-app.put('/api/user/:userId/cart/order=desc', async(req, res) => {
+app.put('/user/:userId/cart/order=desc', async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.sortLocations_desc(userId);
 
@@ -123,7 +123,7 @@ app.put('/api/user/:userId/cart/order=desc', async(req, res) => {
     res.json(ing);
 });
 
-app.put('/api/user/:userId/cart/order=asc', async(req, res) => {
+app.put('/user/:userId/cart/order=asc', async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.sortLocations_asc(userId);
 
