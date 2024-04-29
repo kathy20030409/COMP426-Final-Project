@@ -1,13 +1,15 @@
+import {db} from './db.mjs';
+
 export class User {
     #id
     #username
     #password
     #locations
 
-    constructor(username, password){
+    constructor(id, username, password){
         this.#username = username;
         this.#password = password;
-        this.#id = User.next_id;
+        this.#id = id;
         this.#locations = [];
     }
 
@@ -16,15 +18,16 @@ export class User {
             let id;
             try {
                 let db_result = await db.run(
-                    'INSERT INTO users VALUES (NULL, ?, ?)', 
-                    [username, hashedPassword]
-                );
+                    'INSERT INTO users (username, password) VALUES (?, ?)', 
+                    [data.username, data.password]
+                )
                 id = db_result.lastID;
+                let newUser = new User(id, data.username, data.password);
+                return newUser;
             } catch (e) {
+                console.log(e);
                 return null;
             }
-            let newUser = new User(id, data.username, data.password);
-            return newUser;
         }
         return null;
     }
@@ -32,7 +35,7 @@ export class User {
     static async login(data){
         if (data!== undefined && data.username!== undefined && data.password!== undefined){
             try {
-                let user = await db.get('SELECT * FROM users WHERE username = ?', [username]);
+                let user = await db.get('SELECT * FROM users WHERE username = ?', [data.username]);
                 if (user && data.password == user.password) {
                     return user;
                 } else {
