@@ -51,8 +51,8 @@ app.post('/api/login', async (req, res) => {
 });
 
 // Get user-specific selections
-app.get('/api/selections', authenticateToken, async (req, res) => {
-    const userId = req.userId;
+app.get('/api/user/:userId/selections', async (req, res) => {
+    const userId = req.params.userId;
     let ing = await User.getLocations(userId);
     if (ing == 400) {
         res.status(400).json({ message: 'Invalid request body' });
@@ -65,7 +65,7 @@ app.get('/api/selections', authenticateToken, async (req, res) => {
 });
 
 
-app.post('/api/user/:userId/cart/add', authenticateToken, async(req, res) => {
+app.post('/api/user/:userId/cart/add', async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.addLocation(userId, req.body.location);
 

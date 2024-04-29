@@ -18,12 +18,11 @@ db.run(`
   `);
 
 db.run(`CREATE TABLE IF NOT EXISTS locations (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     weather TEXT NOT NULL,
     temperature REAL NOT NULL,
-    user_id INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    user_id INTEGER NOT NULL
 );
 `);
 

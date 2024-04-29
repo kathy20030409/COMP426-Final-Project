@@ -67,7 +67,9 @@ export class User {
             const data = await response.json();
             const weatherDescription = data.weather[0].main;
             const temp = data.main.temp;
-            return {weatherDescription, temp};
+            return {
+                "weather": weatherDescription, 
+                "temperature": temp};
         } catch {
             console.error('Error fetching weather data:', error);
         }
@@ -75,13 +77,13 @@ export class User {
 
     static async addLocation(user_id, location) {
         if (user_id !== undefined && location !== undefined) {
-
             try {
-                let {weather, temp} = await User.getWeather(location);
-                let db_result = await db.run(
-                    'INSERT INTO user_items VALUES (NULL, ?, ?, ?, ?)', [location, weather, temp, user_id]);
-                return User.getLocations(user_id);
-            } catch {
+                let {"weather": weather, "temperature": temp} = await User.getWeather(location);
+                console.log(weather, temp);
+                await db.run(
+                    'INSERT INTO locations (name, weather, temperature, user_id) VALUES (?, ?, ?, ?)', [location, weather, temp, user_id]);
+                return await User.getLocations(user_id);
+            } catch (e) {
                 return 500;
             }
             
