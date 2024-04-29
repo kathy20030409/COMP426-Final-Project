@@ -2,8 +2,6 @@ import { hash, compare } from "bcrypt";
 import pkg from "jsonwebtoken";
 const { sign } = pkg;
 import { setTokenCookie } from "./authMiddleware.mjs";
-import sqlite3 from "sqlite3";
-import { db } from "./db.mjs";
 import dotenv from "dotenv";
 dotenv.config();
 export const SECRET_KEY = process.env.JWT_SECRET; // Get the secret key from the environment

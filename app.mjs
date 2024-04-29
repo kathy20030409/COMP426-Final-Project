@@ -2,6 +2,7 @@ import { User } from "./user.mjs";
 import express from "express";
 import bodyParser from "body-parser";
 import { login, register } from "./authController.mjs";
+import { authenticate } from "./authMiddleware.mjs";
 
 const app = express();
 const PORT = 3000;
@@ -29,7 +30,7 @@ app.post("/api/login", async (req, res) => {
 });
 
 // Get user-specific selections
-app.get("/api/selections", authenticateToken, async (req, res) => {
+app.get("/api/selections", authenticate, async (req, res) => {
   const userId = req.userId;
   let ing = await User.getLocations(userId);
   if (ing == 400) {
@@ -42,7 +43,7 @@ app.get("/api/selections", authenticateToken, async (req, res) => {
   res.json(ing);
 });
 
-app.post("/api/user/:userId/cart/add", authenticateToken, async (req, res) => {
+app.post("/api/user/:userId/cart/add", authenticate, async (req, res) => {
   const userId = req.params.userId;
   let ing = await User.addLocation(userId, req.body.location);
 
