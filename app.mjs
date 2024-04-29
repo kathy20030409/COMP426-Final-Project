@@ -109,7 +109,7 @@ app.delete('/api/user/:userId/cart', async(req, res) => {
     res.json(ing);
 });
 
-app.put('/api/user/:userId/cart/desc', async(req, res) => {
+app.put('/api/user/:userId/cart/order=desc', async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.sortLocations_desc(userId);
 
@@ -123,7 +123,7 @@ app.put('/api/user/:userId/cart/desc', async(req, res) => {
     res.json(ing);
 });
 
-app.put('/api/user/:userId/cart/asc', async(req, res) => {
+app.put('/api/user/:userId/cart/order=asc', async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.sortLocations_asc(userId);
 
