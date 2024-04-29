@@ -19,6 +19,7 @@ app.post('/api/register', async (req, res) => {
     let ing = User.create(req.body);
     if (!ing) {
         res.status(400).json({ message: 'Invalid request body' });
+        return;
     } 
     res.json(ing.json());
 });
@@ -34,26 +35,11 @@ app.post('/api/login', async (req, res) => {
     } else if (ing == 500){
         res.status(500).json({ message: 'Errors occurs during login' });
         return;
+    } else if (ing == 400) {
+        res.status(400).json({ message: 'Invalid request body' });
+        return;
     }
     res.json(ing.json());
-
-/*
-  try {
-    db.get('SELECT * FROM users WHERE username = ?', [username], async (err, row) => {
-      if (!row) {
-      } else {
-        const passwordMatch = await bcrypt.compare(password, row.password);
-        if (passwordMatch) {
-          const token = generateToken({ id: row.id });
-          res.json({ token });
-        } else {
-          res.status(401).json({ message: 'Invalid username or password' });
-        }
-      }
-    });
-  } catch (error) {
-    res.status(500).send(error.message);
-  }*/
 });
 
 function authenticate(req, res, next) {

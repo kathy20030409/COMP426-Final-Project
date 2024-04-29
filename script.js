@@ -8,7 +8,6 @@ async function registerUser() {
         password: password
     };
 
-    // try {
     // Send a POST request to the backend API endpoint
     const response = await fetch('/api/register', {
         method: 'POST',
@@ -22,10 +21,6 @@ async function registerUser() {
     }).then(function (res) {
         console.log('User registered successfully:', res);
     });
-    // } catch (error) {
-    //     // Handle any network or unexpected errors
-    //     console.error('Error registering user:', error.message);
-    // }
 }
 
 document.getElementById('registerForm').addEventListener('submit', function (event) {

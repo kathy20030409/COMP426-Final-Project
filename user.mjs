@@ -30,6 +30,33 @@ export class User {
     }
 
     static async login(data){
+        if (data!== undefined && data.username!== undefined && data.password!== undefined){
+            try {
+                let user = await db.get('SELECT * FROM users WHERE username = ?', [username]);
+                if (user && data.password == user.password) {
+                    return user;
+                } else {
+                    return 401;
+                }
+            } catch (error) {
+                return 500;
+            }
+        } else {
+            return 400;
+        }
+    }
+
+    json() {
+        return {
+            id: this.#id,
+            username: this.#username,
+            location: this.#locations
+        }
+    }
+
+    static async addLocation(username, location) {
         
     }
+
+
 }
