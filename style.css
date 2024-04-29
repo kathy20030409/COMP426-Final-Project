@@ -1,5 +1,7 @@
-*{
-    background-color: RGB(135, 206, 235)
+html{
+    background-image: url(sky.jpg);
+    background-size: cover; /* Cover the entire background */
+    background-repeat: no-repeat; /* Do not repeat the background image */
 }
 .login{
     border: 2px solid black;
@@ -10,6 +12,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 10px;
+    background-color: rgb(233, 255, 219, 0.5)
 }
 
 .user{
@@ -36,6 +39,20 @@
 }
 .bigTitle{
     text-align: center;
+}
+.titleContain{
+    width: 420px;
+    background-color: rgb(233, 255, 219, 0.5);
+    margin-inline: auto;
+    border-radius: 5px;
+    /* border: 1px solid gray; */
+}
+.titleContainR{
+    width: 500px;
+    background-color: rgb(233, 255, 219, 0.5);
+    margin-inline: auto;
+    border-radius: 5px;
+    /* border: 1px solid gray; */
 }
 .submit{
     margin-top: 10px;
