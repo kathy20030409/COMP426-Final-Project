@@ -1,6 +1,7 @@
 import pkg from 'jsonwebtoken';
+import { SECRET_KEY } from './authController.mjs';
 const { verify } = pkg;
-const SECRET_KEY = "your_secret_key";
+
 
 export function authenticate(req, res, next) {
   const token = req.cookies.token;
@@ -17,11 +18,16 @@ export function authenticate(req, res, next) {
   });
 }
 
+/**
+ * Sets a cookie with the JWT token.
+ * @param {object} res - The response object.
+ * @param {string} token - The JWT token.
+ */
 export function setTokenCookie(res, token) {
   res.cookie("token", token, {
-    httpOnly: true,
-    secure: true,
-    maxAge: 3600000, // 1 hour
+    httpOnly: true, // Cookie not accessible via client-side JavaScript.
+    secure: true, // Cookie is sent only over HTTPS.
+    maxAge: 3600000, // Cookie expiration time in milliseconds (1 hour).
   });
 }
 
