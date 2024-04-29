@@ -3,6 +3,7 @@
 }
 .login{
     border: 2px solid black;
+    border-radius: 10px;
     width: 400px;
     position: absolute;
     top: 50%;
@@ -35,4 +36,42 @@
 }
 .bigTitle{
     text-align: center;
+}
+.submit{
+    margin-top: 10px;
+    margin-inline: 170px;
+    width: 70px;
+    height: 22px;
+    font-size: 15px;
+    background-color: gray;
+    color: rgb(230, 222, 222);
+}
+.submit:hover{
+    background-color: black;
+    transition: 1s
+}
+.passLogin{
+    margin-top: 10px;
+    margin-inline: 100px;
+    display: flex;
+    justify-content: center;
+}
+.userLogin{
+    margin-top: 10px;
+    margin-inline: 100px;
+    display: flex;
+    justify-content: center;
+}
+.center{
+    display: flex;
+    justify-content: center;
+}
+.submitSelect{
+    background-color: gray;
+    color: rgb(230, 222, 222);
+    margin-top: 10px;
+}
+.submitSelect:hover{
+    background-color: black;
+    transition: 1s
 }

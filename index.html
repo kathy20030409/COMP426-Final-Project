@@ -5,25 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather App</title>
   <link href="style.css" type="text/css" rel="stylesheet">
+  <!-- Import the script.js file -->
+  <script defer src="script.js"></script>
 </head>
 <body>
   <h1 class="bigTitle">Weather Application Sign In</h1>
-  <div class="login">
-  <h2 class="bigTitle">Login</h2>
-  <form id="loginForm" onsubmit="loginUser(); return false;">
-    <label for="loginUsername">Username:</label>
-    <input type="text" id="loginUsername" name="loginUsername" required>
-    <br>
-    <label for="loginPassword">Password:</label>
-    <input type="password" id="loginPassword" name="loginPassword" required>
-    <br>
-    <button type="submit">Submit</button>
-    <p>Don't have an account? Register Here.</p>
-  </form>
-  </div>
-  
 
-  <!-- Import the script.js file -->
-  <script defer src="script.js"></script>
+  <div class="login">
+    <h2 class="bigTitle">Login</h2>
+    <form id="loginForm" onsubmit="loginUser(); return false;">
+      <div class="userLogin">
+        <label for="loginUsername">Username: </label>
+      <input type="text" id="loginUsername" name="loginUsername" required>
+      <br>
+
+      </div>
+      <div class="passLogin">
+        <label for="loginPassword">Password:&nbsp;</label>
+      <input type="password" id="loginPassword" name="loginPassword" required>
+      <br>
+      </div>
+
+      <button class="submit" type="submit">Submit</button>
+      <p class="center">Don't have an account? &nbsp;<a href="registration.html">Register Here.</a></p>
+    </form>
+  </div>
 </body>
 </html>
