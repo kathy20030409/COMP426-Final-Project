@@ -16,7 +16,7 @@ export class User {
             let id;
             try {
                 let db_result = await db.run(
-                    'INSERT INTO users (username, password) VALUES (NULL, ?, ?)', 
+                    'INSERT INTO users VALUES (NULL, ?, ?)', 
                     [username, hashedPassword]
                 );
                 id = db_result.lastID;
@@ -54,9 +54,54 @@ export class User {
         }
     }
 
-    static async addLocation(username, location) {
-        
+    static async getWeather(location){
+        const apiKey = '905b0b58184fe072a63311caa98fcf8a';
+        const city = location;
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+
+        try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            const weatherDescription = data.weather[0].main;
+            const temp = data.main.temp;
+            return {weatherDescription, temp};
+        } catch {
+            console.error('Error fetching weather data:', error);
+        }
     }
 
+    static async addLocation(user_id, location) {
+        if (user_id !== undefined && location !== undefined) {
 
+            try {
+                let {weather, temp} = await User.getWeather(location);
+                let db_result = await db.run(
+                    'INSERT INTO user_items VALUES (NULL, ?, ?, ?, ?)', [location, weather, temp, user_id]);
+                return User.getLocations(user_id);
+            } catch {
+                return 500;
+            }
+            
+        } else {
+            return 400;
+        }
+    }
+
+    static async getLocations(user_id){
+        if (user_id !== undefined) {
+            try {
+                let locations = await db.all('SELECT * FROM locations WHERE user_id = ?', [user_id]);
+                return locations;
+
+            } catch (error) {
+                return 500;
+            }
+        } else {
+            return 400;
+        }
+    }
+
+    getUserLocation(){
+        return this.#locations;
+    }
 }
