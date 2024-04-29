@@ -50,6 +50,23 @@ app.post('/api/login', async (req, res) => {
     res.json(ing);
 });
 
+app.put('/api/user/:userId/account', async (req, res) => {
+
+    let ing = await User.changePassword(req.params.userId, req.body.password);
+
+    if (ing == 401) {
+        res.status(401).json({ message: 'Invalid username or password' });
+        return;
+    } else if (ing == 500){
+        res.status(500).json({ message: 'Errors occur during chaning password' });
+        return;
+    } else if (ing== 400) {
+        res.status(400).json({ message: 'Invalid request body' });
+        return;
+    }
+    res.json(ing);
+});
+
 // Get user-specific selections
 app.get('/api/user/:userId/selections', async (req, res) => {
     const userId = req.params.userId;
@@ -64,8 +81,7 @@ app.get('/api/user/:userId/selections', async (req, res) => {
     res.json(ing);
 });
 
-
-app.post('/api/user/:userId/cart/add', async(req, res) => {
+app.post('/api/user/:userId/cart', async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.addLocation(userId, req.body.location);
 
@@ -74,6 +90,48 @@ app.post('/api/user/:userId/cart/add', async(req, res) => {
         return;
     } else if (ing == 500){
         res.status(500).json({ error: 'Failed to add item to cart' });
+        return;
+    }
+    res.json(ing);
+});
+
+app.delete('/api/user/:userId/cart', async(req, res) => {
+    const userId = req.params.userId;
+    let ing = await User.deleteLocation(userId, req.body.location);
+
+    if (ing == 400){
+        res.status(400).json({ message: 'Invalid request body' });
+        return;
+    } else if (ing == 500){
+        res.status(500).json({ error: 'Failed to delete item in cart' });
+        return;
+    }
+    res.json(ing);
+});
+
+app.put('/api/user/:userId/cart/desc', async(req, res) => {
+    const userId = req.params.userId;
+    let ing = await User.sortLocations_desc(userId);
+
+    if (ing == 400){
+        res.status(400).json({ message: 'Invalid request body' });
+        return;
+    } else if (ing == 500){
+        res.status(500).json({ error: 'Failed to sort items' });
+        return;
+    }
+    res.json(ing);
+});
+
+app.put('/api/user/:userId/cart/asc', async(req, res) => {
+    const userId = req.params.userId;
+    let ing = await User.sortLocations_asc(userId);
+
+    if (ing == 400){
+        res.status(400).json({ message: 'Invalid request body' });
+        return;
+    } else if (ing == 500){
+        res.status(500).json({ error: 'Failed to sort items' });
         return;
     }
     res.json(ing);

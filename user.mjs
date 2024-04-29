@@ -53,7 +53,7 @@ export class User {
         return {
             id: this.#id,
             username: this.#username,
-            location: this.#locations
+            password: this.#password
         }
     }
 
@@ -92,10 +92,70 @@ export class User {
         }
     }
 
+    static async deleteLocation(user_id, location) {
+        if (user_id !== undefined && location !== undefined) {
+            try {
+                await db.run(
+                    'DELETE FROM locations WHERE (name, weather, temperature, user_id) = (?, ?, ?, ?)', [location, weather, temp, user_id]);
+                return await User.getLocations(user_id);
+            } catch (e) {
+                return 500;
+            }
+            
+        } else {
+            return 400;
+        }
+    }
+
     static async getLocations(user_id){
         if (user_id !== undefined) {
             try {
                 let locations = await db.all('SELECT * FROM locations WHERE user_id = ?', [user_id]);
+                return locations;
+
+            } catch (error) {
+                return 500;
+            }
+        } else {
+            return 400;
+        }
+    }
+
+    static async changePassword(user_id, password){
+        if (user_id!== undefined && password!== undefined){
+            try {
+                let user = await db.run(
+                    'UPDATE users SET password = ? WHERE id = ?',
+                    [password, user_id]);
+                return user;
+            } catch (error) {
+                return 500;
+            }
+        } else {
+            return 400;
+        }
+    }
+
+    static async sortLocations_desc(user_id){
+        if (user_id !== undefined) {
+            try {
+                let locations = await db.all(
+                    'SELECT * FROM locations WHERE user_id = ? ORDER BY name DESC', [user_id]);
+                return locations;
+
+            } catch (error) {
+                return 500;
+            }
+        } else {
+            return 400;
+        }
+    }
+
+    static async sortLocations_asc(user_id){
+        if (user_id !== undefined) {
+            try {
+                let locations = await db.all(
+                    'SELECT * FROM locations WHERE user_id = ? ORDER BY name ASC', [user_id]);
                 return locations;
 
             } catch (error) {
