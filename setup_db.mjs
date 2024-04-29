@@ -37,8 +37,9 @@ async function initializeDatabase() {
   PRIMARY KEY (user_id, location_id),
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (location_id) REFERENCES locations(id)
+  )
 `);
-  });
+    });
 
   db.close();
 }
