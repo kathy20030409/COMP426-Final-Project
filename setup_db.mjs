@@ -27,7 +27,9 @@ async function initializeDatabase() {
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
     weather TEXT NOT NULL,
-    temperature REAL NOT NULL
+    temperature REAL NOT NULL,
+    user_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 `);
 

@@ -1,3 +1,5 @@
+
+
 async function registerUser() {
     const username = document.getElementById('regUsername').value;
     const password = document.getElementById('regPassword').value;
