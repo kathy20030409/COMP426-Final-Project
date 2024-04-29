@@ -35,7 +35,7 @@ export class User {
     static async login(data){
         if (data!== undefined && data.username!== undefined && data.password!== undefined){
             try {
-                let user = await db.get('SELECT * FROM users WHERE username = ?', [username]);
+                let user = await db.get('SELECT * FROM users WHERE username = ?', [data.username]);
                 if (user && data.password == user.password) {
                     return user;
                 } else {
