@@ -1,3 +1,6 @@
+*{
+    background-color: RGB(135, 206, 235)
+}
 .login{
     border: 2px solid black;
     width: 400px;
@@ -24,4 +27,12 @@
 .drop{
     height: 20px;
     width: 300px;
+}
+.select{
+    top: 30%;
+    left: 5%;
+    position: absolute;
+}
+.bigTitle{
+    text-align: center;
 }
