@@ -1,10 +1,9 @@
 import {User} from './user.mjs'
-
-const express = require('express');
-const bodyParser = require('body-parser');
-const sqlite3 = require('sqlite3').verbose();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import bodyParser from 'body-parser';
+import sqlite3 from 'sqlite3';
+//import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const app = express();
 const PORT = 5501;
@@ -43,7 +42,7 @@ app.post('/api/login', async (req, res) => {
 });
 
 // Get user-specific selections
-app.get('/api/selections', authenticate, (req, res) => {
+app.get('/api/selections', (req, res) => {
     const userId = req.userId;
     let ing = User.getLocations(userId);
     if (ing == 400) {
