@@ -1,13 +1,13 @@
+// import dotenv from 'dotenv';
+// dotenv.config();
+
 import {User} from './user.mjs'
 import express from 'express';
 import bodyParser from 'body-parser';
 import sqlite3 from 'sqlite3';
-//import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
 const app = express();
 const PORT = 5501;
-const SECRET_KEY = 'your_secret_key'; // Change this to a secure random string
 
 const db = new sqlite3.Database('./data.db');
 

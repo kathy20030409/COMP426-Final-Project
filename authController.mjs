@@ -1,18 +1,25 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { setTokenCookie } = require("./authMiddleware");
-const db = require("./database"); // Assume you have a database module
-const cookieManager = require('./cookieManager');
+import { hash, compare } from "bcrypt";
+import pkg from "jsonwebtoken";
+const { sign } = pkg;
+import { setTokenCookie } from "./authMiddleware.mjs";
+import sqlite3 from "sqlite3";
+const db = new sqlite3.Database("./data.db");
+import dotenv from "dotenv";
+dotenv.config();
+const SECRET_KEY = process.env.JWT_SECRET; // Get the secret key from the environment
 
-const SECRET_KEY = "your_secret_key";
-
-function generateToken(id) {
-  return jwt.sign({ userId: id }, SECRET_KEY, { expiresIn: "90 days" });
+if (!process.env.JWT_SECRET) {
+  console.error("JWT_SECRET is not defined in the environment.");
+  process.exit(1); // Exit application with an error
 }
 
-exports.register = async (req, res) => {
+function generateToken(id) {
+  return sign({ userId: id }, SECRET_KEY, { expiresIn: "90 days" });
+}
+
+export async function register(req, res) {
   const { username, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await hash(password, 10);
 
   db.run(
     "INSERT INTO users (username, password) VALUES (?, ?)",
@@ -26,9 +33,9 @@ exports.register = async (req, res) => {
       res.json({ message: "User registered successfully" });
     }
   );
-};
+}
 
-exports.login = async (req, res) => {
+export async function login(req, res) {
   const { username, password } = req.body;
   db.get(
     "SELECT * FROM users WHERE username = ?",
@@ -39,7 +46,7 @@ exports.login = async (req, res) => {
           .status(401)
           .json({ message: "Invalid username or password" });
       }
-      const match = await bcrypt.compare(password, user.password);
+      const match = await compare(password, user.password);
       if (match) {
         const token = generateToken(user.id);
         setTokenCookie(res, token);
@@ -49,4 +56,4 @@ exports.login = async (req, res) => {
       }
     }
   );
-};
+}
