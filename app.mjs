@@ -68,7 +68,7 @@ app.put('/api/user/:userId/account', async (req, res) => {
 });
 
 // Get user-specific selections
-app.get('/api/user/:userId/selections', async (req, res) => {
+app.get('/api/user/:userId/cart', async (req, res) => {
     const userId = req.params.userId;
     let ing = await User.getLocations(userId);
     if (ing == 400) {
