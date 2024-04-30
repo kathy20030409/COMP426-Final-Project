@@ -6,21 +6,27 @@ async function registerUser() {
         username: username,
         password: password
     };
-
-    const response = await fetch('http://localhost:3000/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user) 
-    }).then(function (res) {
-        console.log(res);
-        return res.json();
-    }).then(function (res) {
+    try {
+        const response = await fetch('http://localhost:3000/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        const data = await response.json();
+        console.log(data.message);
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to register');
+        }
         console.log('User registered successfully:', res);
         // do i need to carry over user/password info from url?
-        window.location.href= 'index.html';
-    });
+        window.location.href = 'index.html';
+    }
+    catch (error) {
+        console.error('Error logging in user:', error);
+        alert('Error: ' + error.message);
+    }
 }
 
 async function loginUser() {
@@ -38,10 +44,21 @@ async function loginUser() {
 
         const data = await response.json();
         localStorage.setItem('token', data.token); // Store the token in local storage
+<<<<<<< HEAD
         alert('User logged in successfully!');
+=======
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to register');
+        }
+        // need to send the user info somehow?
+        // this is throwing an invalid error :(
+        window.location.href = "list.html"
+        // let user = document.getE`lementById('user')
+        // user.innerHTML = `${res.`body.username}`
+>>>>>>> dfa5715 (update script.js)
     } catch (error) {
         console.error('Error logging in user:', error);
-        alert('Invalid username or password. Please try again.');
+        alert('Error: ' + error.message);
     }
 }
 
@@ -66,7 +83,7 @@ async function submitSelection() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token 
+                'Authorization': token
             },
             body: JSON.stringify({ selection })
         });
