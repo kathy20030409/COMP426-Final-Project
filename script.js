@@ -8,20 +8,30 @@ async function registerUser() {
         username: username,
         password: password
     };
-
-    const response = await fetch('http://localhost:3000/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user) 
-    }).then(function (res) {
-        console.log(res);
-        return res.json();
-    }).then(function (res) {
-        console.log('User registered successfully:', res);
-        window.location.href= 'index.html';
-    });
+    try {
+        const response = await fetch('http://localhost:3000/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user),
+            credentials: 'include' // Ensure credentials are included if needed
+        })
+        // console.log(response.headers.getSetCookie());
+        const data = await response.json();
+        // document.getElementById('responseDiv').innerHTML = `<p>Success: ${data}</p>`;
+        console.log(data);
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to register');
+        }
+        console.log('User registered successfully:', response);
+        // do i need to carry over user/password info from url?
+        window.location.href = 'index.html';
+    }
+    catch (error) {
+        console.error('Error logging in user:', error);
+        alert('Error: ' + error.message);
+    }
 }
 
 async function loginUser() {
@@ -34,17 +44,22 @@ async function loginUser() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username, password }),
+            credentials: 'include' // Ensure credentials are included if needed
         });
 
         const data = await response.json();
-        localStorage.setItem('token', data.token); // Store the token in local storage
-        alert('User logged in successfully!');
-        // need to send the more user info?
-        window.location.href = `list.html?username=${data.username}`
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to register');
+        }
+        // need to send the user info somehow?
+        // this is throwing an invalid error :(
+        window.location.href = "list.html"
+        // let user = document.getE`lementById('user')
+        // user.innerHTML = `${res.`body.username}`
     } catch (error) {
         console.error('Error logging in user:', error);
-        alert('Invalid username or password. Please try again.');
+        alert('Error: ' + error.message);
     }
 }
 
@@ -70,8 +85,9 @@ async function submitSelection() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token 
+                'Authorization': token
             },
+            credentials: 'include', // Ensure credentials are included if needed
             body: JSON.stringify({ selection })
         });
 
@@ -92,6 +108,7 @@ async function changePassword() {
         headers: {
             'Content-Type': 'application/json'
         },
+        credentials: 'include', // Ensure credentials are included if needed
         body: JSON.stringify({ password: password })
     });
 
