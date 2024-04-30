@@ -1,9 +1,94 @@
+html{
+    background-image: url(sky.jpg);
+    background-size: cover; /* Cover the entire background */
+    background-repeat: no-repeat; /* Do not repeat the background image */
+}
 .login{
     border: 2px solid black;
+    border-radius: 10px;
     width: 400px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 10px;
+    background-color: rgb(233, 255, 219, 0.5)
+}
+
+.user{
+    left: 90%;
+    top: 0%;
+    position: absolute;
+}
+
+.title{
+    top:5%;
+    left: 5%;
+    position: absolute;
+    font-size: 50px;
+}
+
+.drop{
+    height: 20px;
+    width: 300px;
+}
+.select{
+    top: 30%;
+    left: 5%;
+    position: absolute;
+}
+.bigTitle{
+    text-align: center;
+}
+.titleContain{
+    width: 420px;
+    background-color: rgb(233, 255, 219, 0.5);
+    margin-inline: auto;
+    border-radius: 5px;
+    /* border: 1px solid gray; */
+}
+.titleContainR{
+    width: 500px;
+    background-color: rgb(233, 255, 219, 0.5);
+    margin-inline: auto;
+    border-radius: 5px;
+    /* border: 1px solid gray; */
+}
+.submit{
+    margin-top: 10px;
+    margin-inline: 170px;
+    width: 70px;
+    height: 22px;
+    font-size: 15px;
+    background-color: gray;
+    color: rgb(230, 222, 222);
+}
+.submit:hover{
+    background-color: black;
+    transition: 1s
+}
+.passLogin{
+    margin-top: 10px;
+    margin-inline: 100px;
+    display: flex;
+    justify-content: center;
+}
+.userLogin{
+    margin-top: 10px;
+    margin-inline: 100px;
+    display: flex;
+    justify-content: center;
+}
+.center{
+    display: flex;
+    justify-content: center;
+}
+.submitSelect{
+    background-color: gray;
+    color: rgb(230, 222, 222);
+    margin-top: 10px;
+}
+.submitSelect:hover{
+    background-color: black;
+    transition: 1s
 }
