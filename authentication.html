@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Authentication and Selections</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link href="style.css" type="text/css" rel="stylesheet">
+    <script defer src="script.js"></script>
 </head>
 <body>
   <h1>User Authentication and Selections</h1>
   
   <h2>Registration</h2>
-  <form id="registerForm" onsubmit="loginUser(); return false;">
+  <form id="registerForm">
     <label for="regUsername">Username:</label>
     <input type="text" id="regUsername" name="regUsername" required>
     <br>
@@ -39,8 +41,5 @@
   </form>
 
   <ul id="userSelections"></ul>
-
-  <!-- Import the script.js file -->
-  <script src="script.js"></script>
 </body>
 </html>
