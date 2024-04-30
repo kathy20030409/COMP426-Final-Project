@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather List</title>
+    <link href="style.css" type="text/css" rel="stylesheet">
+    <script defer src="script.js"></script>
+</head>
+<body>
+  <a class="home" href="index.html">back to home</a>
+  <p class="user" id="user">username</p>
+
+  <div class="titleContain">
+    <h1 class="title">User Selections</h1>
+  </div>
+
+  <div class="select">
+    <form id="selectionForm" onsubmit="submitSelection(); return false;">
+        <label for="userSelection">Selection:</label>
+        <input type="text" id="userSelection" name="userSelection" required>
+        <br>
+        <button class="submitSelect" type="submit">Submit Selection</button>
+      </form>
+  </div>
+  <ul id="userSelections"></ul>
+
+</body>
+</html>
