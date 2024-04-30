@@ -90,8 +90,7 @@ async function submitSelection() {
 }
 */
 
-<<<<<<< Updated upstream
-=======
+
 // Function to change user password
 async function changePassword() {
     const password = document.getElementById('newPassword').value;
@@ -203,4 +202,3 @@ async function sortAscByTemp() {
     console.log(data);
     // Handle response data as needed
 }
->>>>>>> Stashed changes

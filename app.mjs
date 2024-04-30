@@ -1,75 +1,59 @@
-import {User} from './user.mjs';
-import express from 'express';
-import bodyParser from 'body-parser';
+
 import sqlite3 from 'sqlite3';
+import cors from 'cors';
 //import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { WeatherCard } from './weather.mjs';
+import { User } from "./user.mjs";
+import express from "express";
+import bodyParser from "body-parser";
+import { login, register } from "./authController.mjs";
+import { authenticate } from "./authMiddleware.mjs";
+import cookieParser from 'cookie-parser'; // Import cookie-parser
+
 
 const app = express();
 const PORT = 3000;
-const SECRET_KEY = 'your_secret_key'; // Change this to a secure random string
 
-app.use(bodyParser.json());
-
-const authenticateToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    if (token == null) return res.sendStatus(401);
-
-    jwt.verify(token, SECRET_KEY, (err, user) => {
-        if (err) return res.sendStatus(403);
-        req.user = user;
-        next();
-    });
+// CORS configuration
+const corsOptions = {
+    origin: 'http://127.0.0.1:5501',  // Allow this origin to send requests
+    credentials: true  // Allow credentials (cookies, authorization headers, etc.)
 };
 
-app.post('/register', async (req, res) => {
-    let ing= await User.create(req.body);
-    if (ing == null) {
-        res.status(400).json({ message: 'Invalid request body' });
-        return;
-    } 
-    res.json(ing.json());
+app.use(cors(corsOptions));
+// app.use(cors());
+app.use(cookieParser())
+app.use(bodyParser.json());
+
+app.post("/register", async (req, res) => {
+  register(req, res);
 });
 
+app.post("/login", async (req, res) => {
+  login(req, res);
+});
 
-app.post('/login', async (req, res) => {
+app.put('/user/account', authenticate, async (req, res) => {
 
-    let ing = await User.login(req.body);
+    let ing = await User.changePassword(req.body.userId, req.body.password);
 
     if (ing == 401) {
         res.status(401).json({ message: 'Invalid username or password' });
         return;
     } else if (ing == 500){
-        res.status(500).json({ message: 'Errors occur during login' });
+        res.status(500).json({ message: 'Errors occur during changing password' });
         return;
     } else if (ing== 400) {
         res.status(400).json({ message: 'Invalid request body' });
         return;
     }
-    res.json(ing);
-});
-
-app.put('/user/:userId/account', async (req, res) => {
-
-    let ing = await User.changePassword(req.params.userId, req.body.password);
-
-    if (ing == 401) {
-        res.status(401).json({ message: 'Invalid username or password' });
-        return;
-    } else if (ing == 500){
-        res.status(500).json({ message: 'Errors occur during chaning password' });
-        return;
-    } else if (ing== 400) {
-        res.status(400).json({ message: 'Invalid request body' });
-        return;
-    }
-    res.json(ing);
+    res.status(200).json({message: 'Successfully reset password'});
 });
 
 // Get user-specific selections
-app.get('/user/:userId/cart', async (req, res) => {
-    const userId = req.params.userId;
+app.get('/user/cart', authenticate, async (req, res) => {
+    const userId = req.body.userId;
     let ing = await User.getLocations(userId);
     if (ing == 400) {
         res.status(400).json({ message: 'Invalid request body' });
@@ -81,22 +65,22 @@ app.get('/user/:userId/cart', async (req, res) => {
     res.json(ing);
 });
 
-app.post('/user/:userId/cart', async(req, res) => {
-    const userId = req.params.userId;
+app.post('/user/cart', authenticate, async(req, res) => {
+    const userId = req.body.userId;
     let ing = await User.addLocation(userId, req.body.location);
 
-    if (ing == 400){
-        res.status(400).json({ message: 'Invalid request body' });
-        return;
-    } else if (ing == 500){
-        res.status(500).json({ error: 'Failed to add item to cart' });
-        return;
-    }
-    res.json(ing);
+  if (ing == 400) {
+    res.status(400).json({ message: "Invalid request body" });
+    return;
+  } else if (ing == 500) {
+    res.status(500).json({ error: "Failed to add item to cart" });
+    return;
+  }
+  res.json(ing);
 });
 
-app.delete('/user/:userId/cart', async(req, res) => {
-    const userId = req.params.userId;
+app.delete('/user/cart', authenticate, async(req, res) => {
+    const userId = req.body.userId;
     let ing = await User.deleteLocation(userId, req.body.location);
 
     if (ing == 400){
@@ -109,8 +93,8 @@ app.delete('/user/:userId/cart', async(req, res) => {
     res.json(ing);
 });
 
-app.put('/user/:userId/cart/order=desc', async(req, res) => {
-    const userId = req.params.userId;
+app.get('/user/cart/order=desc', authenticate, async(req, res) => {
+    const userId = req.body.userId;
     let ing = await User.sortLocations_desc(userId);
 
     if (ing == 400){
@@ -123,8 +107,8 @@ app.put('/user/:userId/cart/order=desc', async(req, res) => {
     res.json(ing);
 });
 
-app.put('/user/:userId/cart/order=asc', async(req, res) => {
-    const userId = req.params.userId;
+app.get('/user/cart/order=asc', authenticate, async(req, res) => {
+    const userId = req.body.userId;
     let ing = await User.sortLocations_asc(userId);
 
     if (ing == 400){
@@ -136,6 +120,35 @@ app.put('/user/:userId/cart/order=asc', async(req, res) => {
     }
     res.json(ing);
 });
+
+app.get('/user/cart/order=desc_temp', authenticate, async(req, res) => {
+    const userId = req.body.userId;
+    let ing = await User.sortLocations_desc_temp(userId);
+
+    if (ing == 400){
+        res.status(400).json({ message: 'Invalid request body' });
+        return;
+    } else if (ing == 500){
+        res.status(500).json({ error: 'Failed to sort items' });
+        return;
+    }
+    res.json(ing);
+});
+
+app.get('/user/cart/order=asc_temp', authenticate, async(req, res) => {
+    const userId = req.body.userId;
+    let ing = await User.sortLocations_asc_temp(userId);
+
+    if (ing == 400){
+        res.status(400).json({ message: 'Invalid request body' });
+        return;
+    } else if (ing == 500){
+        res.status(500).json({ error: 'Failed to sort items' });
+        return;
+    }
+    res.json(ing);
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
