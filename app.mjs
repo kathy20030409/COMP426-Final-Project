@@ -1,5 +1,6 @@
 import {User} from './user.mjs';
 import express from 'express';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import sqlite3 from 'sqlite3';
 //import bcrypt from 'bcrypt';
@@ -7,6 +8,7 @@ import jwt from 'jsonwebtoken';
 
 const app = express();
 const PORT = 3000;
+app.use(cors());
 const SECRET_KEY = 'your_secret_key'; // Change this to a secure random string
 
 app.use(bodyParser.json());
