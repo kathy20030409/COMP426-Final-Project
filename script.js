@@ -2,19 +2,17 @@ async function registerUser() {
     const username = document.getElementById('regUsername').value;
     const password = document.getElementById('regPassword').value;
 
-    // Create a user object with username and password
     const user = {
         username: username,
         password: password
     };
 
-    // Send a POST request to the backend API endpoint
     const response = await fetch('http://localhost:3000/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(user) // Convert user object to JSON string
+        body: JSON.stringify(user) 
     }).then(function (res) {
         console.log(res);
         return res.json();
@@ -22,7 +20,6 @@ async function registerUser() {
         console.log('User registered successfully:', res);
     });
 }
-
 
 async function loginUser() {
     const username = document.getElementById('loginUsername').value;
