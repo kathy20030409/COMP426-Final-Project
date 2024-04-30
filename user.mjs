@@ -1,3 +1,4 @@
+import { WeatherCard } from './weather.mjs';
 import { db } from "./db.mjs";
 import { hash, compare } from "bcrypt";
 export class User {

@@ -1,3 +1,5 @@
+// import { WeatherCard } from "./weather.mjs";
+
 async function registerUser() {
     const username = document.getElementById('regUsername').value;
     const password = document.getElementById('regPassword').value;
@@ -65,6 +67,7 @@ async function loginUser() {
 function logoutUser() {
     localStorage.removeItem('token'); // Remove the token from local storage
     alert('User logged out successfully!');
+
 }
 
 // Function to submit user selection
@@ -124,10 +127,12 @@ async function getCart() {
     // Handle response data as needed
 }
 
-// Function to add location to user's cart
+// Function to add location to user's list
 async function addLocation() {
-    const userId = document.getElementById('userId').value;
-    const location = document.getElementById('newLocation').value;
+    // const userId = idk, need to be given;
+
+    // should populate with weather cards here?
+    
 
     const response = await fetch(`http://localhost:3000/user/${userId}/cart`, {
         method: 'POST',
@@ -139,13 +144,14 @@ async function addLocation() {
 
     const data = await response.json();
     console.log(data);
+    
     // Handle response data as needed
 }
 
-// Function to delete location from user's cart
+// Function to delete location from user's list
 async function deleteLocation() {
-    const userId = document.getElementById('userId').value;
-    const location = document.getElementById('deleteLocation').value;
+    const userId = idk // need to be given
+    const location = document.getElementById('userSelection').value;
 
     const response = await fetch(`http://localhost:3000/user/${userId}/cart`, {
         method: 'DELETE',

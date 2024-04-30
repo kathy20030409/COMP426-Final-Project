@@ -68,6 +68,7 @@ app.get('/user/cart', authenticate, async (req, res) => {
 app.post('/user/cart', authenticate, async(req, res) => {
     const userId = req.body.userId;
     let ing = await User.addLocation(userId, req.body.location);
+    // use weather card here?
 
   if (ing == 400) {
     res.status(400).json({ message: "Invalid request body" });

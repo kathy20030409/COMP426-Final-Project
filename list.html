@@ -12,18 +12,35 @@
   <p class="user" id="user">username</p>
 
   <div class="titleContain">
-    <h1 class="title">User Selections</h1>
+    <h1 class="title">City Weather</h1>
   </div>
 
   <div class="select">
-    <form id="selectionForm" onsubmit="submitSelection(); return false;">
-        <label for="userSelection">Selection:</label>
+    <form id="selectionForm" onsubmit="addLocation(); return false;">
+        <label for="userSelection">Please enter a city:</label>
         <input type="text" id="userSelection" name="userSelection" required>
         <br>
-        <button class="submitSelect" type="submit">Submit Selection</button>
+        <button class="submitSelect" type="submit">Submit</button>
       </form>
   </div>
-  <ul id="userSelections"></ul>
+  <script>
+    // used to add username in top right
+    document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('username');
+    // i am never reaching this, idk why, hoping log in methods work successfully
+    if (username === null || username === undefined) {
+      alert("You are not logged in!");
+    }
+    else{
+      let user = document.getElementById('user');
+      user.innerHTML = username;
+    }
+    });
+  </script>
+  <ul id="userSelections">
+    
+  </ul>
 
 </body>
 </html>
