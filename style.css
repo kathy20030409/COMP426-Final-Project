@@ -22,7 +22,13 @@ html{
     background-color: rgb(233, 255, 219, 0.5);
     border-radius: 5px;
 }
-
+.home{
+    left: 2%;
+    top: 2%;
+    position: absolute;
+    background-color: rgb(233, 255, 219, 0.5);
+    border-radius: 5px;
+}
 .title{
     font-size: 50px;
     text-align: center;

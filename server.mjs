@@ -1,16 +1,18 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const sqlite3 = require('sqlite3').verbose();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import sqlite3 from 'sqlite3';
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken';
+// const bcrypt = require('bcrypt');
+// const jwt = require('jsonwebtoken');
 
 const app = express();
 const PORT = 3000;
 app.use(cors());
 const SECRET_KEY = 'your_secret_key'; // Change this to a secure random string
 
-const db = new sqlite3.Database('./data.db');
+const db = new sqlite3.Database('./db.sqlite');
 
 app.use(bodyParser.json());
 
