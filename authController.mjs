@@ -12,7 +12,6 @@ if (!process.env.JWT_SECRET) {
   process.exit(1); // Exit application with an error
 }
 
-
 function generateToken(id) {
   return sign({ userId: id }, SECRET_KEY, { expiresIn: "90 days" });
 }
@@ -20,7 +19,10 @@ export async function register(req, res) {
   req.body.password = await hash(req.body.password, 10);
 
   let newUser = await User.create(req.body);
-  if (!newUser) {
+  if (newUser instanceof Error){
+    res.status(500).json({ message: newUser.message });
+    return;
+  } else if (!newUser) {
     res.status(400).json({ message: "Invalid request body" });
     return;
   }
@@ -31,21 +33,23 @@ export async function register(req, res) {
 
 export async function login(req, res) {
   let returnUser = await User.login(req.body);
-  let {ing, user} = returnUser;
-    if (ing == 401) {
-        res.status(401).json({ message: 'Invalid username or password' });
-        return;
-    } else if (ing == 500){
-        res.status(500).json({ message: 'Errors occur during login' });
-        return;
-    } else if (ing== 400) {
-        res.status(400).json({ message: 'Invalid request body' });
-        return;
-    } else if (ing == 200) {
-      res.status(200).json({ message: 'Logged in successfully', user: user});
-      return;
-    } else {
-      res.status(500).json({ message: 'ing is not 200, Unknown error'});
-      return;
-    }
+  let { ing, user } = returnUser;
+  if (ing == 401) {
+    res.status(401).json({ message: "Invalid username or password" });
+    return;
+  } else if (ing == 500) {
+    res.status(500).json({ message: "Errors occur during login" });
+    return;
+  } else if (ing == 400) {
+    res.status(400).json({ message: "Invalid request body" });
+    return;
+  } else if (ing == 200) {
+    const token = generateToken(user.id);
+    setTokenCookie(res, token);
+    res.status(200).json({ message: "Logged in successfully", user: user });
+    return;
+  } else {
+    res.status(500).json({ message: "ing is not 200, Unknown error" });
+    return;
+  }
 }

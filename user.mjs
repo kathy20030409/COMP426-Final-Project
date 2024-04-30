@@ -21,6 +21,13 @@ export class User {
     ) {
       let id;
       try {
+        // check if the username already exists
+        const user = await db.get("SELECT * FROM users WHERE username = ?", [
+          data.username,
+        ]);
+        if (user) {
+            throw new Error("Username already exists");
+        }
         let db_result = await db.run(
           "INSERT INTO users (username, password) VALUES (?, ?)",
           [data.username, data.password]
@@ -30,7 +37,7 @@ export class User {
         return newUser;
       } catch (e) {
         console.log(e);
-        return null;
+        return e;
       }
     }
     return null;

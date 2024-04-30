@@ -25,10 +25,11 @@ export function authenticate(req, res, next) {
  */
 export function setTokenCookie(res, token) {
   res.cookie("token", token, {
-    httpOnly: true, // Cookie not accessible via client-side JavaScript.
-    secure: true, // Cookie is sent only over HTTPS.
-    maxAge: 3600000, // Cookie expiration time in milliseconds (1 hour).
+    // httpOnly: true, // Cookie not accessible via client-side JavaScript.
+    // secure: true, // Cookie is sent only over HTTPS.
+    maxAge: 8 * 3600000 // cookie will be removed after 8 hours
   });
+  console.log('Cookie set:', res.get('Set-Cookie'));  // Logging the cookie
 }
 
 export function clearTokenCookie(res) {
