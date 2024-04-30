@@ -1,3 +1,5 @@
+// import { WeatherCard } from "./weather.mjs";
+
 async function registerUser() {
     const username = document.getElementById('regUsername').value;
     const password = document.getElementById('regPassword').value;
@@ -18,7 +20,6 @@ async function registerUser() {
         return res.json();
     }).then(function (res) {
         console.log('User registered successfully:', res);
-        // do i need to carry over user/password info from url?
         window.location.href= 'index.html';
     });
 }
@@ -39,11 +40,8 @@ async function loginUser() {
         const data = await response.json();
         localStorage.setItem('token', data.token); // Store the token in local storage
         alert('User logged in successfully!');
-        // need to send the user info somehow?
-        // this is throwing an invalid error :(
-        window.location.href = "list.html"
-        let user = document.getElementById('user')
-        user.innerHTML = `${res.body.username}`
+        // need to send the more user info?
+        window.location.href = `list.html?username=${data.username}`
     } catch (error) {
         console.error('Error logging in user:', error);
         alert('Invalid username or password. Please try again.');
@@ -111,28 +109,34 @@ async function getCart() {
     // Handle response data as needed
 }
 
-// Function to add location to user's cart
+// Function to add location to user's list
 async function addLocation() {
-    const userId = document.getElementById('userId').value;
-    const location = document.getElementById('newLocation').value;
+    const userId = idk // need to be given;
+    // trying to populate lcoationPlace
+    let location = document.getElementById('userSelection').value;
+    let locationPlace = document.getElementById('userSelections');
+    let locationCard = document.createElement('li');
+    locationCard = new WeatherCard(25, "New York", "Sunny");
+    locationPlace.append(locationCard.render());
 
-    const response = await fetch(`http://localhost:3000/user/${userId}/cart`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ location: location })
-    });
+    // const response = await fetch(`http://localhost:3000/user/${userId}/cart`, {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({ location: location })
+    // });
 
-    const data = await response.json();
-    console.log(data);
+    // const data = await response.json();
+    // console.log(data);
+    
     // Handle response data as needed
 }
 
-// Function to delete location from user's cart
+// Function to delete location from user's list
 async function deleteLocation() {
-    const userId = document.getElementById('userId').value;
-    const location = document.getElementById('deleteLocation').value;
+    const userId = idk // need to be given
+    const location = document.getElementById('userSelection').value;
 
     const response = await fetch(`http://localhost:3000/user/${userId}/cart`, {
         method: 'DELETE',
