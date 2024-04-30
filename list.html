@@ -8,17 +8,20 @@
     <script defer src="script.js"></script>
 </head>
 <body>
-    <p class="user">username</p>
+  <p class="user">username</p>
 
-    <h2 class="title">User Selections</h2>
-    <div class="select">
-        <form id="selectionForm" onsubmit="submitSelection(); return false;">
-            <label for="userSelection">Selection:</label>
-            <input type="text" id="userSelection" name="userSelection" required>
-            <br>
-            <button class="submitSelect" type="submit">Submit Selection</button>
-          </form>
-    </div>
+  <div class="titleContain">
+    <h1 class="title">User Selections</h1>
+  </div>
+
+  <div class="select">
+    <form id="selectionForm" onsubmit="submitSelection(); return false;">
+        <label for="userSelection">Selection:</label>
+        <input type="text" id="userSelection" name="userSelection" required>
+        <br>
+        <button class="submitSelect" type="submit">Submit Selection</button>
+      </form>
+  </div>
 
   <ul id="userSelections"></ul>
 

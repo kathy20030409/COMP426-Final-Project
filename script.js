@@ -18,6 +18,8 @@ async function registerUser() {
         return res.json();
     }).then(function (res) {
         console.log('User registered successfully:', res);
+        // do i need to carry over user/password info from url?
+        window.location.href= 'index.html';
     });
 }
 
