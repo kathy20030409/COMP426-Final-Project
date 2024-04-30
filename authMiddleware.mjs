@@ -13,7 +13,7 @@ export function authenticate(req, res, next) {
     if (err) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    req.userId = decoded.userId;
+    req.body.userId = decoded.userId;
     next();
   });
 }
@@ -27,7 +27,7 @@ export function setTokenCookie(res, token) {
   res.cookie("token", token, {
     // httpOnly: true, // Cookie not accessible via client-side JavaScript.
     // secure: true, // Cookie is sent only over HTTPS.
-    maxAge: 8 * 3600000 // cookie will be removed after 8 hours
+    maxAge: 30 * 24 * 3600000 // cookie will be removed after 8 hours
   });
   console.log('Cookie set:', res.get('Set-Cookie'));  // Logging the cookie
 }

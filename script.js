@@ -12,14 +12,17 @@ async function registerUser() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(user)
+            body: JSON.stringify(user),
+            credentials: 'include' // Ensure credentials are included if needed
         })
+        // console.log(response.headers.getSetCookie());
         const data = await response.json();
-        console.log(data.message);
+        // document.getElementById('responseDiv').innerHTML = `<p>Success: ${data}</p>`;
+        console.log(data);
         if (!response.ok) {
             throw new Error(data.message || 'Failed to register');
         }
-        console.log('User registered successfully:', res);
+        console.log('User registered successfully:', response);
         // do i need to carry over user/password info from url?
         window.location.href = 'index.html';
     }
