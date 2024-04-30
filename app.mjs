@@ -42,7 +42,7 @@ app.put('/user/account', authenticate, async (req, res) => {
         res.status(401).json({ message: 'Invalid username or password' });
         return;
     } else if (ing == 500){
-        res.status(500).json({ message: 'Errors occur during chaning password' });
+        res.status(500).json({ message: 'Errors occur during changing password' });
         return;
     } else if (ing== 400) {
         res.status(400).json({ message: 'Invalid request body' });
@@ -121,47 +121,6 @@ app.put('/user/cart/order=asc', authenticate, async(req, res) => {
     res.json(ing);
 });
 
-app.delete('/user/cart', authenticate, async(req, res) => {
-    const userId = req.params.userId;
-    let ing = await User.deleteLocation(userId, req.body.location);
-
-    if (ing == 400){
-        res.status(400).json({ message: 'Invalid request body' });
-        return;
-    } else if (ing == 500){
-        res.status(500).json({ error: 'Failed to delete item in cart' });
-        return;
-    }
-    res.json(ing);
-});
-
-app.put('/user/cart/order=desc', authenticate, async(req, res) => {
-    const userId = req.params.userId;
-    let ing = await User.sortLocations_desc(userId);
-
-    if (ing == 400){
-        res.status(400).json({ message: 'Invalid request body' });
-        return;
-    } else if (ing == 500){
-        res.status(500).json({ error: 'Failed to sort items' });
-        return;
-    }
-    res.json(ing);
-});
-
-app.put('/user/cart/order=asc', authenticate, async(req, res) => {
-    const userId = req.params.userId;
-    let ing = await User.sortLocations_asc(userId);
-
-    if (ing == 400){
-        res.status(400).json({ message: 'Invalid request body' });
-        return;
-    } else if (ing == 500){
-        res.status(500).json({ error: 'Failed to sort items' });
-        return;
-    }
-    res.json(ing);
-});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
