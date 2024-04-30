@@ -5,6 +5,7 @@ import sqlite3 from 'sqlite3';
 import cors from 'cors';
 //import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { WeatherCard } from './weather.mjs';
 // import { WeatherCard } from './weather.mjs';
 
 const app = express();
@@ -87,6 +88,7 @@ app.get('/user/:userId/cart', async (req, res) => {
 app.post('/user/:userId/cart', async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.addLocation(userId, req.body.location);
+    // use weather card here?
 
     if (ing == 400){
         res.status(400).json({ message: 'Invalid request body' });

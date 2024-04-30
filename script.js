@@ -1,4 +1,4 @@
-import { WeatherCard } from "./weather.mjs";
+// import { WeatherCard } from "./weather.mjs";
 
 async function registerUser() {
     const username = document.getElementById('regUsername').value;
@@ -112,13 +112,10 @@ async function getCart() {
 
 // Function to add location to user's list
 async function addLocation() {
-    // const userId = idk // need to be given;
-    // trying to populate lcoationPlace
-    let location = document.getElementById('userSelection').value;
-    let locationPlace = document.getElementById('userSelections');
-    let locationCard = document.createElement('li');
-    locationCard = new WeatherCard(25, "New York", "Sunny");
-    locationPlace.append(locationCard.render());
+    // const userId = idk, need to be given;
+
+    // should populate with weather cards here?
+    
 
     const response = await fetch(`http://localhost:3000/user/${userId}/cart`, {
         method: 'POST',
@@ -128,8 +125,8 @@ async function addLocation() {
         body: JSON.stringify({ location: location })
     });
 
-    // const data = await response.json();
-    // console.log(data);
+    const data = await response.json();
+    console.log(data);
     
     // Handle response data as needed
 }

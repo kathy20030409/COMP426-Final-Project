@@ -1,4 +1,5 @@
 import {db} from './db.mjs';
+import { WeatherCard } from './weather.mjs';
 
 export class User {
     #id

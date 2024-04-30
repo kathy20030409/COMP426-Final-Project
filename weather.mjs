@@ -5,8 +5,8 @@ export class WeatherCard {
       this.description = description;
     }
   
-    static create(){
-      // TODO?
+    static create(temperature, cityName, description) {
+      return new WeatherCard(temperature, cityName, description);
     }
 
     getTemperature() {
