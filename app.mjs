@@ -2,13 +2,16 @@ import {User} from './user.mjs';
 import express from 'express';
 import bodyParser from 'body-parser';
 import sqlite3 from 'sqlite3';
+import cors from 'cors';
 //import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { WeatherCard } from './weather.mjs';
 
 const app = express();
 const PORT = 3000;
 const SECRET_KEY = 'your_secret_key'; // Change this to a secure random string
 
+app.use(cors());
 app.use(bodyParser.json());
 
 const authenticateToken = (req, res, next) => {

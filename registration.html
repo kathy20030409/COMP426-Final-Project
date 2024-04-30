@@ -14,19 +14,19 @@
 
     <div class="login">
         <h2 class="bigTitle">Registration</h2>
-        <form id="registerForm">
-        <div class="userLogin">
-            <label for="regUsername">Username:</label>
-            <input type="text" id="regUsername" name="regUsername" required>
-            <br>
-        </div>
-        <div class="passLogin">
-            <label for="regPassword">Password:&nbsp;</label>
-            <input type="password" id="regPassword" name="regPassword" required>
-            <br>
-        </div>
-        <button class="submit" type="submit">Submit</button>
-        <p class="center">Already have an account? &nbsp;<a href="index.html">Sign in Here.</a></p>
+        <form id="registerForm" onsubmit="registerUser(); return false;" >
+            <div class="userLogin">
+                <label for="regUsername">Username:</label>
+                <input type="text" id="regUsername" name="regUsername" required>
+                <br>
+            </div>
+            <div class="passLogin">
+                <label for="regPassword">Password:&nbsp;</label>
+                <input type="password" id="regPassword" name="regPassword" required>
+                <br>
+            </div>
+            <button class="submit" type="submit">Submit</button>
+            <p class="center">Already have an account? &nbsp;<a href="index.html">Sign in Here.</a></p>
         </form>
     </div>
 
