@@ -14,12 +14,13 @@ async function registerUser() {
         },
         body: JSON.stringify(user) 
     }).then(function (res) {
-        console.log(res);
+        console.log(res.headers.getSetCookie);
         return res.json();
     }).then(function (res) {
+        console.log(document.cookie);
         console.log('User registered successfully:', res);
         // do i need to carry over user/password info from url?
-        window.location.href= 'index.html';
+        // window.location.href= 'index.html';
     });
 }
 
@@ -41,9 +42,10 @@ async function loginUser() {
         alert('User logged in successfully!');
         // need to send the user info somehow?
         // this is throwing an invalid error :(
-        window.location.href = "list.html"
-        let user = document.getElementById('user')
-        user.innerHTML = `${res.body.username}`
+        // window.location.href = "list.html"
+        // let user = document.getElementById('user')
+        // user.innerHTML = `${res.body.username}`
+        console.log(res.headers.getSetCookie);
     } catch (error) {
         console.error('Error logging in user:', error);
         alert('Invalid username or password. Please try again.');

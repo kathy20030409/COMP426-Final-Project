@@ -1,6 +1,4 @@
-import {User} from './user.mjs';
-import express from 'express';
-import bodyParser from 'body-parser';
+
 import sqlite3 from 'sqlite3';
 import cors from 'cors';
 //import bcrypt from 'bcrypt';
@@ -17,7 +15,14 @@ import cookieParser from 'cookie-parser'; // Import cookie-parser
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+// CORS configuration
+const corsOptions = {
+    origin: 'http://127.0.0.1:5501',  // Allow this origin to send requests
+    credentials: true  // Allow credentials (cookies, authorization headers, etc.)
+};
+
+app.use(cors(corsOptions));
+// app.use(cors());
 app.use(cookieParser())
 app.use(bodyParser.json());
 
@@ -29,7 +34,7 @@ app.post("/login", async (req, res) => {
   login(req, res);
 });
 
-app.put('/user/:userId/account', async (req, res) => {
+app.put('/user/:userId/account', authenticate, async (req, res) => {
 
     let ing = await User.changePassword(req.params.userId, req.body.password);
 
@@ -88,7 +93,7 @@ app.delete('/user/:userId/cart', authenticate, async(req, res) => {
     res.json(ing);
 });
 
-app.put('/user/:userId/cart/order=desc', async(req, res) => {
+app.put('/user/:userId/cart/order=desc', authenticate, async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.sortLocations_desc(userId);
 
@@ -102,7 +107,7 @@ app.put('/user/:userId/cart/order=desc', async(req, res) => {
     res.json(ing);
 });
 
-app.put('/user/:userId/cart/order=asc', async(req, res) => {
+app.put('/user/:userId/cart/order=asc', authenticate, async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.sortLocations_asc(userId);
 
@@ -116,7 +121,7 @@ app.put('/user/:userId/cart/order=asc', async(req, res) => {
     res.json(ing);
 });
 
-app.delete('/user/:userId/cart', async(req, res) => {
+app.delete('/user/:userId/cart', authenticate, async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.deleteLocation(userId, req.body.location);
 
@@ -130,7 +135,7 @@ app.delete('/user/:userId/cart', async(req, res) => {
     res.json(ing);
 });
 
-app.put('/user/:userId/cart/order=desc', async(req, res) => {
+app.put('/user/:userId/cart/order=desc', authenticate, async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.sortLocations_desc(userId);
 
@@ -144,7 +149,7 @@ app.put('/user/:userId/cart/order=desc', async(req, res) => {
     res.json(ing);
 });
 
-app.put('/user/:userId/cart/order=asc', async(req, res) => {
+app.put('/user/:userId/cart/order=asc', authenticate, async(req, res) => {
     const userId = req.params.userId;
     let ing = await User.sortLocations_asc(userId);
 

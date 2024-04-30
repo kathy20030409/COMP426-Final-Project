@@ -128,7 +128,7 @@ export class User {
         if (user_id !== undefined && location !== undefined) {
             try {
                 await db.run(
-                    'DELETE FROM locations WHERE (name, weather, temperature, user_id) = (?, ?, ?, ?)', [location, weather, temp, user_id]);
+                    'DELETE FROM locations WHERE (name, user_id) = (?, ?)', [location, user_id]);
                 return await User.getLocations(user_id);
             } catch (e) {
                 return 500;
