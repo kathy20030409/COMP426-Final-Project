@@ -20,11 +20,6 @@ async function registerUser() {
         console.log('User registered successfully:', res);
     });
 }
-document.getElementById('registerForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-    registerUser();
-});
-
 
 async function loginUser() {
     const username = document.getElementById('loginUsername').value;

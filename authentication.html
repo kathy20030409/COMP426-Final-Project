@@ -11,7 +11,7 @@
   <h1>User Authentication and Selections</h1>
   
   <h2>Registration</h2>
-  <form id="registerForm">
+  <form id="registerForm" onsubmit="registerUser(); return false;">
     <label for="regUsername">Username:</label>
     <input type="text" id="regUsername" name="regUsername" required>
     <br>
