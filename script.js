@@ -1,5 +1,3 @@
-
-
 async function registerUser() {
     const username = document.getElementById('regUsername').value;
     const password = document.getElementById('regPassword').value;
@@ -89,7 +87,6 @@ async function submitSelection() {
     }
 }
 */
-
 
 // Function to change user password
 async function changePassword() {
