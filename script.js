@@ -42,11 +42,11 @@ async function loginUser() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username, password }),
+            credentials: 'include' // Ensure credentials are included if needed
         });
 
         const data = await response.json();
-        localStorage.setItem('token', data['header']['Set-Cookie']); // Store the token in local storage
         if (!response.ok) {
             throw new Error(data.message || 'Failed to register');
         }
@@ -84,6 +84,7 @@ async function submitSelection() {
                 'Content-Type': 'application/json',
                 'Authorization': token
             },
+            credentials: 'include', // Ensure credentials are included if needed
             body: JSON.stringify({ selection })
         });
 
@@ -104,6 +105,7 @@ async function changePassword() {
         headers: {
             'Content-Type': 'application/json'
         },
+        credentials: 'include', // Ensure credentials are included if needed
         body: JSON.stringify({ password: password })
     });
 
