@@ -1,4 +1,4 @@
-// import { WeatherCard } from "./weather.mjs";
+import { WeatherCard } from "./weather.mjs";
 
 async function registerUser() {
     const username = document.getElementById('regUsername').value;
@@ -52,6 +52,7 @@ async function loginUser() {
 function logoutUser() {
     localStorage.removeItem('token'); // Remove the token from local storage
     alert('User logged out successfully!');
+
 }
 
 // Function to submit user selection
@@ -111,7 +112,7 @@ async function getCart() {
 
 // Function to add location to user's list
 async function addLocation() {
-    const userId = idk // need to be given;
+    // const userId = idk // need to be given;
     // trying to populate lcoationPlace
     let location = document.getElementById('userSelection').value;
     let locationPlace = document.getElementById('userSelections');
@@ -119,13 +120,13 @@ async function addLocation() {
     locationCard = new WeatherCard(25, "New York", "Sunny");
     locationPlace.append(locationCard.render());
 
-    // const response = await fetch(`http://localhost:3000/user/${userId}/cart`, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({ location: location })
-    // });
+    const response = await fetch(`http://localhost:3000/user/${userId}/cart`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ location: location })
+    });
 
     // const data = await response.json();
     // console.log(data);
