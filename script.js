@@ -46,7 +46,7 @@ async function loginUser() {
         });
 
         const data = await response.json();
-        localStorage.setItem('token', data.token); // Store the token in local storage
+        localStorage.setItem('token', data['header']['Set-Cookie']); // Store the token in local storage
         if (!response.ok) {
             throw new Error(data.message || 'Failed to register');
         }
