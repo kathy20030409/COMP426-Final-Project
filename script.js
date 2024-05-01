@@ -67,40 +67,10 @@ function logoutUser() {
     alert('User logged out successfully!');
 }
 
-// Function to submit user selection
-async function submitSelection() {
-    const selection = document.getElementById('userSelection').value;
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-        alert('Please log in to submit your selection.');
-        return;
-    }
-
-    try {
-        const response = await fetch('http://localhost:3000/selections', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            credentials: 'include', // Ensure credentials are included if needed
-            body: JSON.stringify({ selection })
-        });
-
-        alert('Selection submitted successfully!');
-    } catch (error) {
-        console.error('Error submitting selection:', error);
-        alert('An error occurred while submitting your selection. Please try again.');
-    }
-}
-
 // Function to change user password
 async function changePassword() {
-    const userId = document.getElementById('userId').value;
     const password = document.getElementById('newPassword').value;
-
-    const response = await fetch(`http://localhost:3000/user/${userId}/account`, {
+    const response = await fetch(`http://localhost:3000/user/account`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -116,9 +86,10 @@ async function changePassword() {
 
 // Function to get user's cart
 async function getCart() {
-    const userId = document.getElementById('userId').value;
-
-    const response = await fetch(`http://localhost:3000/user/${userId}/cart`);
+    const response = await fetch(`http://localhost:3000/user/cart`, {
+        method: "GET",
+        credentials: 'include'
+    });
     const data = await response.json();
     console.log(data);
     // Handle response data as needed
@@ -126,15 +97,14 @@ async function getCart() {
 
 // Function to add location to user's cart
 async function addLocation() {
-    const userId = document.getElementById('userId').value;
     const location = document.getElementById('newLocation').value;
-
-    const response = await fetch(`http://localhost:3000/user/${userId}/cart`, {
+    const response = await fetch(`http://localhost:3000/user/cart`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ location: location })
+        body: JSON.stringify({ location: location }),
+        credentials: 'include'
     });
 
     const data = await response.json();
@@ -144,15 +114,14 @@ async function addLocation() {
 
 // Function to delete location from user's cart
 async function deleteLocation() {
-    const userId = document.getElementById('userId').value;
     const location = document.getElementById('deleteLocation').value;
-
-    const response = await fetch(`http://localhost:3000/user/${userId}/cart`, {
+    const response = await fetch(`http://localhost:3000/user/cart`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ location: location })
+        body: JSON.stringify({ location: location }),
+        credentials: 'include'
     });
 
     const data = await response.json();
@@ -160,12 +129,11 @@ async function deleteLocation() {
     // Handle response data as needed
 }
 
-// Function to sort locations in descending order
+// Function to sort locations by name in descending order
 async function sortDesc() {
-    const userId = document.getElementById('userId').value;
-
-    const response = await fetch(`http://localhost:3000/user/${userId}/cart/order=desc`, {
-        method: 'PUT'
+    const response = await fetch(`http://localhost:3000/user/cart/order=desc`, {
+        method: 'PUT',
+        credentials: 'include'
     });
 
     const data = await response.json();
@@ -173,12 +141,35 @@ async function sortDesc() {
     // Handle response data as needed
 }
 
-// Function to sort locations in ascending order
+// Function to sort locations by name in ascending order
 async function sortAsc() {
-    const userId = document.getElementById('userId').value;
+    const response = await fetch(`http://localhost:3000/user/cart/order=asc`, {
+        method: 'PUT',
+        credentials: 'include'
+    });
 
-    const response = await fetch(`http://localhost:3000/user/${userId}/cart/order=asc`, {
-        method: 'PUT'
+    const data = await response.json();
+    console.log(data);
+    // Handle response data as needed
+}
+
+// Function to sort locations by temperature in descending order
+async function sortDesc() {
+    const response = await fetch(`http://localhost:3000/user/cart/order=desc_temp`, {
+        method: 'PUT',
+        credentials: 'include'
+    });
+
+    const data = await response.json();
+    console.log(data);
+    // Handle response data as needed
+}
+
+// Function to sort locations by temperature in ascending order
+async function sortAsc() {
+    const response = await fetch(`http://localhost:3000/user/cart/order=asc_temp`, {
+        method: 'PUT',
+        credentials: 'include'
     });
 
     const data = await response.json();
