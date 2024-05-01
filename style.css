@@ -98,3 +98,27 @@ html{
     background-color: black;
     transition: 1s
 }
+
+.locations {
+    display: flex;
+    margin-top: 150px;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Ensure the container takes up the full height of the viewport */
+  }
+  
+  /* Set the table width to fill the available space */
+  #cartTable {
+    width: 100%;
+  }
+  
+  /* Set table styles as needed */
+  #cartTable th, #cartTable td {
+    border: 1px solid #000; /* Example border styling */
+    padding: 8px; /* Example padding */
+  }
+  
+  /* Additional styling for table headers if needed */
+  #cartTable th {
+    background-color: #f0f0f0; /* Example background color */
+  }

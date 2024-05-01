@@ -4,7 +4,7 @@ const { verify } = pkg;
 
 
 export function authenticate(req, res, next) {
-  const token = req.cookies.token;
+  const token = req.body.token;
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -25,9 +25,7 @@ export function authenticate(req, res, next) {
  */
 export function setTokenCookie(res, token) {
   res.cookie("token", token, {
-    // httpOnly: true, // Cookie not accessible via client-side JavaScript.
-    // secure: true, // Cookie is sent only over HTTPS.
-    maxAge: 30 * 24 * 3600000 // cookie will be removed after 30 days
+    maxAge: 30 * 24 * 3600000, // cookie will be removed after 30 days
   });
   console.log('Cookie set:', res.get('Set-Cookie'));  // Logging the cookie
 }

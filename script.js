@@ -1,13 +1,16 @@
-// import { WeatherCard } from "./weather.mjs";
-
+let list = [];
 async function registerUser() {
-    const username = document.getElementById('regUsername').value;
-    const password = document.getElementById('regPassword').value;
+    const usernameInput = document.getElementById('regUsername');
+    const passwordInput = document.getElementById('regPassword');
+
+    const username = usernameInput.value;
+    const password = passwordInput.value;
 
     const user = {
         username: username,
         password: password
     };
+
     try {
         const response = await fetch('http://localhost:3000/register', {
             method: 'POST',
@@ -15,28 +18,29 @@ async function registerUser() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(user),
-            credentials: 'include' // Ensure credentials are included if needed
-        })
-        // console.log(response.headers.getSetCookie());
+            credentials: 'include'
+        });
+
         const data = await response.json();
-        // document.getElementById('responseDiv').innerHTML = `<p>Success: ${data}</p>`;
-        console.log(data);
+
         if (!response.ok) {
             throw new Error(data.message || 'Failed to register');
         }
-        console.log('User registered successfully:', response);
-        // do i need to carry over user/password info from url?
+
+        console.log('User registered successfully:', data);
         window.location.href = 'index.html';
-    }
-    catch (error) {
-        console.error('Error logging in user:', error);
+    } catch (error) {
+        console.error('Error registering user:', error);
         alert('Error: ' + error.message);
     }
 }
 
 async function loginUser() {
-    const username = document.getElementById('loginUsername').value;
-    const password = document.getElementById('loginPassword').value;
+    const usernameInput = document.getElementById('loginUsername');
+    const passwordInput = document.getElementById('loginPassword');
+
+    const username = usernameInput.value;
+    const password = passwordInput.value;
 
     try {
         const response = await fetch('http://localhost:3000/login', {
@@ -45,149 +49,170 @@ async function loginUser() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ username, password }),
-            credentials: 'include' // Ensure credentials are included if needed
+            credentials: 'include'
         });
 
         const data = await response.json();
+
         if (!response.ok) {
-            throw new Error(data.message || 'Failed to register');
+            throw new Error(data.message || 'Failed to login');
         }
-        // need to send the user info somehow?
-        // this is throwing an invalid error :(
-        window.location.href = "list.html"
-        // let user = document.getE`lementById('user')
-        // user.innerHTML = `${res.`body.username}`
+
+        localStorage.setItem('token', data.token);
+        window.location.href = "list.html";
     } catch (error) {
         console.error('Error logging in user:', error);
         alert('Error: ' + error.message);
     }
 }
 
-
 function logoutUser() {
-    localStorage.removeItem('token'); // Remove the token from local storage
+    localStorage.removeItem('token');
     alert('User logged out successfully!');
-
 }
 
-// Function to submit user selection
-async function submitSelection() {
-    const selection = document.getElementById('userSelection').value;
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-        alert('Please log in to submit your selection.');
-        return;
-    }
+async function changePassword() {
+    const newPasswordInput = document.getElementById('newPassword');
+    const newPassword = newPasswordInput.value;
 
     try {
-        const response = await fetch('http://localhost:3000/selections', {
-            method: 'POST',
+        const response = await fetch(`http://localhost:3000/user/account`, {
+            method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
+                'Content-Type': 'application/json'
             },
-            credentials: 'include', // Ensure credentials are included if needed
-            body: JSON.stringify({ selection })
+            credentials: 'include',
+            body: JSON.stringify({ password: newPassword, token: localStorage.getItem('token') })
         });
 
-        alert('Selection submitted successfully!');
+        const data = await response.json();
+        console.log(data);
     } catch (error) {
-        console.error('Error submitting selection:', error);
-        alert('An error occurred while submitting your selection. Please try again.');
+        console.error('Error changing password:', error);
+        alert('Error: ' + error.message);
     }
 }
 
-// Function to change user password
-async function changePassword() {
-    const userId = document.getElementById('userId').value;
-    const password = document.getElementById('newPassword').value;
-
-    const response = await fetch(`http://localhost:3000/user/${userId}/account`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'include', // Ensure credentials are included if needed
-        body: JSON.stringify({ password: password })
-    });
-
-    const data = await response.json();
-    console.log(data);
-    // Handle response data as needed
-}
-
-// Function to get user's cart
 async function getCart() {
-    const userId = document.getElementById('userId').value;
+  try {
+      const response = await fetch(`http://localhost:3000/user/cart`, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify({ token: localStorage.getItem('token') })
+      });
 
-    const response = await fetch(`http://localhost:3000/user/${userId}/cart`);
-    const data = await response.json();
-    console.log(data);
-    // Handle response data as needed
+      const data = await response.json();
+      console.log(data);
+  } catch (error) {
+      console.error('Error getting cart:', error);
+      alert('Error: ' + error.message);
+  }
 }
 
-// Function to add location to user's list
 async function addLocation() {
-    // const userId = idk, need to be given;
+  const location = document.getElementById('selection').value;
 
-    // should populate with weather cards here?
-    
+  try {
+      const response = await fetch(`http://localhost:3000/user/cart`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ location: location, token: localStorage.getItem('token') }),
+          credentials: 'include'
+      });
 
-    const response = await fetch(`http://localhost:3000/user/${userId}/cart`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ location: location })
-    });
-
-    const data = await response.json();
-    console.log(data);
-    
-    // Handle response data as needed
+      const data = await response.json();
+      data.forEach((item, index) => {
+        localStorage.setItem('cartData', JSON.stringify(item));
+        list.push(item);
+      });
+      // localStorage.removeItem('cartData');
+      // localStorage.setItem('cartData', data);
+      // renderCart(data);
+  } catch (error) {
+      console.error('Error adding location:', error);
+      alert('Error: ' + error.message);
+  }
 }
 
-// Function to delete location from user's list
+function getAll() {
+  renderCart(list);
+  console.log(list);
+}
+
+function renderCart(data) {
+  const tableBody = document.querySelector("#cartTable tbody");
+  tableBody.innerHTML = ''; // Clear previous content
+  data.forEach((item, index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+              <td>${index + 1}</td>
+              <td>${item.name}</td>
+              <td>${item.weather}</td>
+              <td>${item.temperature}</td>
+          `;
+      tableBody.appendChild(row);
+  });
+}
+
+
 async function deleteLocation() {
-    const userId = idk // need to be given
-    const location = document.getElementById('userSelection').value;
+    const locationInput = document.getElementById('userSelection');
+    const location = locationInput.value;
 
-    const response = await fetch(`http://localhost:3000/user/${userId}/cart`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ location: location })
-    });
+    try {
+        const response = await fetch(`http://localhost:3000/user/cart`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ location: location, token: localStorage.getItem('token') }),
+        });
 
-    const data = await response.json();
-    console.log(data);
-    // Handle response data as needed
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error('Error deleting location:', error);
+        alert('Error: ' + error.message);
+    }
 }
 
-// Function to sort locations in descending order
 async function sortDesc() {
-    const userId = document.getElementById('userId').value;
+    try {
+        const response = await fetch(`http://localhost:3000/user/cart/order=desc`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ token: localStorage.getItem('token') }),
+        });
 
-    const response = await fetch(`http://localhost:3000/user/${userId}/cart/order=desc`, {
-        method: 'PUT'
-    });
-
-    const data = await response.json();
-    console.log(data);
-    // Handle response data as needed
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error('Error sorting in descending order:', error);
+        alert('Error: ' + error.message);
+    }
 }
 
-// Function to sort locations in ascending order
 async function sortAsc() {
-    const userId = document.getElementById('userId').value;
+    try {
+        const response = await fetch(`http://localhost:3000/user/cart/order=asc`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ token: localStorage.getItem('token') }),
+        });
 
-    const response = await fetch(`http://localhost:3000/user/${userId}/cart/order=asc`, {
-        method: 'PUT'
-    });
-
-    const data = await response.json();
-    console.log(data);
-    // Handle response data as needed
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error('Error sorting in ascending order:', error);
+        alert('Error: ' + error.message);
+    }
 }

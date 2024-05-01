@@ -46,7 +46,9 @@ export async function login(req, res) {
   } else if (ing == 200) {
     const token = generateToken(user.id);
     setTokenCookie(res, token);
-    res.status(200).json({ message: "Logged in successfully", user: user });
+    res.status(200).json({ message: "Logged in successfully", user: user,
+    token: token
+  });
     return;
   } else {
     res.status(500).json({ message: "ing is not 200, Unknown error" });
