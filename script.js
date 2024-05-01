@@ -81,28 +81,33 @@ function logoutUser() {
 //         return;
 //     }
 async function changePassword() {
-  const newPasswordInput = document.getElementById("newPassword");
-  const newPassword = newPasswordInput.value;
+  const password = document.getElementById('newPassword').value;
 
-  try {
-    const response = await fetch(`http://localhost:3000/user/account`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        password: newPassword,
-        token: localStorage.getItem("token"),
-      }),
-    });
+  try {   
+      const response = await fetch(`http://localhost:3000/user/account`, {
+          method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          credentials: 'include', // Ensure credentials are included if needed
+          body: JSON.stringify({ password: password, token: localStorage.getItem('token')})
+      });
 
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.error("Error changing password:", error);
-    alert("Error: " + error.message);
+      const data = await response.json();
+      console.log(data);
+
+      if (!response.ok) {
+          throw new Error(data.message || 'Failed to change password');
+      }
+      console.log('User changed password successfully:', response);
+      window.location.href = 'index.html';
+      localStorage.removeItem('token');
   }
+  catch (error) {
+      console.error('Error changing password in user:', error);
+      alert('Error: ' + error.message);
+  }
+
 }
 
 async function getCart() {
@@ -111,13 +116,15 @@ async function getCart() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        token: localStorage.getItem("token"),
       },
       credentials: "include",
-      body: JSON.stringify({ token: localStorage.getItem("token") }),
+      // body: JSON.stringify({ token: localStorage.getItem("token") }),
     });
-
     const data = await response.json();
     console.log(data);
+    localStorage.setItem("cartData", JSON.stringify(data));
+    getAll();
   } catch (error) {
     console.error("Error getting cart:", error);
     alert("Error: " + error.message);
@@ -142,6 +149,7 @@ async function addLocation() {
 
     const data = await response.json();
     localStorage.setItem("cartData", JSON.stringify(data));
+    // getAll();
     // localStorage.removeItem('cartData');
     // localStorage.setItem('cartData', data);
     // renderCart(data);

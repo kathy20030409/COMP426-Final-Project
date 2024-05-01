@@ -24,6 +24,14 @@ html {
     border-radius: 5px;
 }
 
+.reset{
+    left: 90%;
+    top: 3.5%;
+    position: absolute;
+    background-color: rgb(233, 255, 219, 0.5);
+    border-radius: 5px;
+}
+
 .home {
     left: 2%;
     top: 2%;

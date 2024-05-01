@@ -17,7 +17,7 @@ const PORT = 3000;
 
 // CORS configuration
 const corsOptions = {
-    origin: 'http://127.0.0.1:5502',  // Allow this origin to send requests
+    origin: ['http://127.0.0.1:5502', 'http://127.0.0.1:5501'],  // Allow this origin to send requests
     credentials: true  // Allow credentials (cookies, authorization headers, etc.)
 };
 
