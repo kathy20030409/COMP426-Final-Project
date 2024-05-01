@@ -57,7 +57,7 @@ async function loginUser() {
         if (!response.ok) {
             throw new Error(data.message || 'Failed to login');
         }
-
+        localStorage.setItem('username', data.user.username)
         localStorage.setItem('token', data.token);
         window.location.href = "list.html";
     } catch (error) {
@@ -126,10 +126,7 @@ async function addLocation() {
       });
 
       const data = await response.json();
-      data.forEach((item, index) => {
-        localStorage.setItem('cartData', JSON.stringify(item));
-        list.push(item);
-      });
+    localStorage.setItem('cartData', JSON.stringify(data));  
       // localStorage.removeItem('cartData');
       // localStorage.setItem('cartData', data);
       // renderCart(data);
@@ -140,41 +137,75 @@ async function addLocation() {
 }
 
 function getAll() {
-  renderCart(list);
-  console.log(list);
+  var retrievedData = localStorage.getItem('cartData');
+// Since the data is stored as a JSON string, parse it to convert back to an object
+var cartData = JSON.parse(retrievedData);
+console.log(cartData);
+  renderCart(cartData);
 }
+
+/*
+function renderCart(data) {
+  const tableBody = document.querySelector("#cartTable tbody");
+  tableBody.innerHTML = ''; // Clear previous content
+
+  data.forEach((item, index) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${item.name}</td>
+            <td>${item.weather}</td>
+            <td>${item.temperature}</td>
+        `;
+    tableBody.appendChild(row);
+  });
+}
+*/
 
 function renderCart(data) {
   const tableBody = document.querySelector("#cartTable tbody");
   tableBody.innerHTML = ''; // Clear previous content
+
   data.forEach((item, index) => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-              <td>${index + 1}</td>
-              <td>${item.name}</td>
-              <td>${item.weather}</td>
-              <td>${item.temperature}</td>
-          `;
-      tableBody.appendChild(row);
+    const row = document.createElement('tr');
+    const btnCell = document.createElement('td');
+    const button = document.createElement('button');
+    button.textContent = 'Delete';
+    button.addEventListener('click', async() => {
+      var row = button.parentNode.parentNode;
+      await deleteLocation(row.cells[1].textContent);
+      getAll();
+    });
+    btnCell.appendChild(button);
+    row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${item.id}</td>
+        <td>${item.name}</td>
+        <td>${item.weather}</td>
+        <td>${item.temperature}</td>
+    `;
+    row.appendChild(btnCell);
+    tableBody.appendChild(row);
   });
 }
 
 
-async function deleteLocation() {
-    const locationInput = document.getElementById('userSelection');
-    const location = locationInput.value;
-
+async function deleteLocation(location_id ) {
     try {
         const response = await fetch(`http://localhost:3000/user/cart`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ location: location, token: localStorage.getItem('token') }),
+            body: JSON.stringify({location_id: location_id, token: localStorage.getItem('token') }),
         });
-
+        console.log(response);
+        if(!response.ok){
+          throw new Error('Failed to delete the cart');
+        }
+        
         const data = await response.json();
-        console.log(data);
+        localStorage.setItem('cartData', JSON.stringify(data));  
     } catch (error) {
         console.error('Error deleting location:', error);
         alert('Error: ' + error.message);
@@ -184,7 +215,7 @@ async function deleteLocation() {
 async function sortDesc() {
     try {
         const response = await fetch(`http://localhost:3000/user/cart/order=desc`, {
-            method: 'PUT',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -202,7 +233,7 @@ async function sortDesc() {
 async function sortAsc() {
     try {
         const response = await fetch(`http://localhost:3000/user/cart/order=asc`, {
-            method: 'PUT',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             },

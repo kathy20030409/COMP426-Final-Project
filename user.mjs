@@ -130,12 +130,12 @@ export class User {
     }
   }
 
-  static async deleteLocation(user_id, location) {
-    if (user_id !== undefined && location !== undefined) {
+  static async deleteLocation(user_id, location_id) {
+    if (user_id !== undefined && location_id !== undefined) {
       try {
-        await db.run("DELETE FROM locations WHERE (name, user_id) = (?, ?)", [
-          location,
-          user_id,
+        await db.run("DELETE FROM locations WHERE (id, user_id) = (?, ?)", [
+          location_id,
+          user_id
         ]);
         return await User.getLocations(user_id);
       } catch (e) {

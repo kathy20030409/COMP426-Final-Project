@@ -81,7 +81,7 @@ app.post('/user/cart', authenticate, async(req, res) => {
 
 app.delete('/user/cart', authenticate, async(req, res) => {
     const userId = req.body.userId;
-    let ing = await User.deleteLocation(userId, req.body.location);
+    let ing = await User.deleteLocation(userId, req.body.location_id);
 
     if (ing == 400){
         res.status(400).json({ message: 'Invalid request body' });
