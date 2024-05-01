@@ -17,12 +17,12 @@ const PORT = 3000;
 
 // CORS configuration
 const corsOptions = {
-    origin: 'http://127.0.0.1:5501',  // Allow this origin to send requests
+    origin: 'http://127.0.0.1:5502',  // Allow this origin to send requests
     credentials: true  // Allow credentials (cookies, authorization headers, etc.)
 };
 
+// app.use(cors(corsOptions));
 app.use(cors(corsOptions));
-// app.use(cors());
 app.use(cookieParser())
 app.use(bodyParser.json());
 
@@ -68,7 +68,6 @@ app.get('/user/cart', authenticate, async (req, res) => {
 app.post('/user/cart', authenticate, async(req, res) => {
     const userId = req.body.userId;
     let ing = await User.addLocation(userId, req.body.location);
-    // use weather card here?
 
   if (ing == 400) {
     res.status(400).json({ message: "Invalid request body" });
