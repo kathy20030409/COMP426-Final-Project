@@ -132,7 +132,7 @@ async function deleteLocation() {
 // Function to sort locations by name in descending order
 async function sortDesc() {
     const response = await fetch(`http://localhost:3000/user/cart/order=desc`, {
-        method: 'PUT',
+        method: 'GET',
         credentials: 'include'
     });
 
@@ -144,7 +144,7 @@ async function sortDesc() {
 // Function to sort locations by name in ascending order
 async function sortAsc() {
     const response = await fetch(`http://localhost:3000/user/cart/order=asc`, {
-        method: 'PUT',
+        method: 'GET',
         credentials: 'include'
     });
 
@@ -156,7 +156,7 @@ async function sortAsc() {
 // Function to sort locations by temperature in descending order
 async function sortDesc() {
     const response = await fetch(`http://localhost:3000/user/cart/order=desc_temp`, {
-        method: 'PUT',
+        method: 'GET',
         credentials: 'include'
     });
 
@@ -168,7 +168,7 @@ async function sortDesc() {
 // Function to sort locations by temperature in ascending order
 async function sortAsc() {
     const response = await fetch(`http://localhost:3000/user/cart/order=asc_temp`, {
-        method: 'PUT',
+        method: 'GET',
         credentials: 'include'
     });
 
