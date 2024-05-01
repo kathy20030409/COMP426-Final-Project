@@ -16,7 +16,7 @@ export class WeatherCard {
     getDescription() {
       return this.description;
     }
-  
+  /*
     render() {
       return `
         <div class="weather-card">
@@ -26,9 +26,10 @@ export class WeatherCard {
         </div>
       `;
     }
+    */
   }
   
   // Example usage
   const weatherCard = new WeatherCard(25, "New York", "Sunny");
-  console.log(weatherCard.render());
+//  console.log(weatherCard.render());
   
