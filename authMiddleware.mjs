@@ -2,9 +2,8 @@ import pkg from 'jsonwebtoken';
 import { SECRET_KEY } from './authController.mjs';
 const { verify } = pkg;
 
-
 export function authenticate(req, res, next) {
-  const token = req.body.token;
+  const token = req.body.token == undefined ?  req.headers.token : req.body.token; // Extract token from cookies
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -13,7 +12,7 @@ export function authenticate(req, res, next) {
     if (err) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    req.body.userId = decoded.userId;
+    req.body.userId =  decoded.userId; // Attach user ID to req.user
     next();
   });
 }

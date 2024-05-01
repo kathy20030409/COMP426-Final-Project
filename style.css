@@ -1,9 +1,10 @@
-html{
+html {
     background-image: url(sky.jpg);
-    background-size: cover; /* Cover the entire background */
-    background-repeat: no-repeat; /* Do not repeat the background image */
+    background-size: cover;
+    background-repeat: no-repeat;
 }
-.login{
+
+.login {
     border: 2px solid black;
     border-radius: 10px;
     width: 400px;
@@ -12,55 +13,58 @@ html{
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 10px;
-    background-color: rgb(233, 255, 219, 0.5)
+    background-color: rgba(233, 255, 219, 0.5);
 }
 
-.user{
+.user {
     left: 90%;
     top: 0%;
     position: absolute;
-    background-color: rgb(233, 255, 219, 0.5);
+    background-color: rgba(233, 255, 219, 0.5);
     border-radius: 5px;
 }
-.home{
+
+.home {
     left: 2%;
     top: 2%;
     position: absolute;
-    background-color: rgb(233, 255, 219, 0.5);
+    background-color: rgba(233, 255, 219, 0.5);
     border-radius: 5px;
 }
-.title{
+
+.title {
     font-size: 50px;
     text-align: center;
 }
 
-.drop{
+.drop {
     height: 20px;
     width: 300px;
 }
-.select{
-    top: 30%;
-    left: 5%;
-    position: absolute;
+
+.select {
+    margin-top: 100px;
+    margin-left: 250px;
 }
-.bigTitle{
+
+.bigTitle {
     text-align: center;
 }
-.titleContain{
+
+.titleContain,
+.titleContainR {
     width: 420px;
-    background-color: rgb(233, 255, 219, 0.5);
+    background-color: rgba(233, 255, 219, 0.5);
     margin-inline: auto;
     border-radius: 5px;
     /* border: 1px solid gray; */
 }
-.titleContainR{
+
+.titleContainR {
     width: 500px;
-    background-color: rgb(233, 255, 219, 0.5);
-    margin-inline: auto;
-    border-radius: 5px;
-    /* border: 1px solid gray; */
 }
-.submit{
+
+.submit {
     margin-top: 10px;
     margin-inline: 170px;
     width: 70px;
@@ -69,56 +73,54 @@ html{
     background-color: gray;
     color: rgb(230, 222, 222);
 }
-.submit:hover{
+
+.submit:hover {
     background-color: black;
-    transition: 1s
+    transition: 1s;
 }
-.passLogin{
+
+.passLogin,
+.userLogin {
     margin-top: 10px;
     margin-inline: 100px;
     display: flex;
     justify-content: center;
 }
-.userLogin{
-    margin-top: 10px;
-    margin-inline: 100px;
+
+.center {
     display: flex;
     justify-content: center;
 }
-.center{
-    display: flex;
-    justify-content: center;
-}
-.submitSelect{
+
+.submitSelect {
     background-color: gray;
     color: rgb(230, 222, 222);
     margin-top: 10px;
 }
-.submitSelect:hover{
+
+.submitSelect:hover {
     background-color: black;
-    transition: 1s
+    transition: 1s;
 }
 
 .locations {
     display: flex;
-    margin-top: 150px;
+    margin-top: 80px;
     justify-content: center;
     align-items: center;
-    height: 100%; /* Ensure the container takes up the full height of the viewport */
-  }
-  
-  /* Set the table width to fill the available space */
-  #cartTable {
+    height: 100%;
+}
+
+#cartTable {
     width: 100%;
-  }
-  
-  /* Set table styles as needed */
-  #cartTable th, #cartTable td {
-    border: 1px solid #000; /* Example border styling */
-    padding: 8px; /* Example padding */
-  }
-  
-  /* Additional styling for table headers if needed */
-  #cartTable th {
-    background-color: #f0f0f0; /* Example background color */
-  }
+}
+
+#cartTable th,
+#cartTable td {
+    border: 1px solid #000;
+    padding: 8px;
+}
+
+#cartTable th {
+    background-color: #f0f0f0;
+}
