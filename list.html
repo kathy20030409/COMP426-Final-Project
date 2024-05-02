@@ -9,9 +9,15 @@
   <script defer src="script.js"></script>
 </head>
 
+<script>
+  if (!localStorage.getItem('token')) {
+    alert('You are not logged in!');
+    window.location.href = 'index.html'; // Redirect to login page
+  }
+</script>
 
 <body>
-  <a class="home" href="index.html">Back to Home</a>
+  <a class="home" href="index.html" onclick="logoutUser()">Back to Home</a>
   <p class="user" id="user">Username</p>
   <p class="reset" id="reset"> &nbsp;<a href="resetPassword.html">Reset Password</a></p>
 
@@ -24,8 +30,8 @@
     <input type="text" id="selection" required>
     <button class="submitSelect" type="button" id="selection" onclick="addLocation()">Add Location</button>
     <button class="submitSelect" id="getAll" onclick="getCart()">Get All</button>
-    <button class="submitSelect" id="orderDesc" onclick="sortDesc()">Sort Desc</button>
-    <button class="submitSelect" id="orderAsc" onclick="sortAsc()">Sort Asc</button>
+    <button class="submitSelect" id="orderDesc" onclick="sortDesc()">Sort Desc Loc</button>
+    <button class="submitSelect" id="orderAsc" onclick="sortAsc()">Sort Asc Loc</button>
     <button class="submitSelect" id="orderDesc" onclick="sortDescTemp()">Sort Desc Temp</button>
     <button class="submitSelect" id="orderAsc" onclick="sortAscTemp()">Sort Asc Temp</button>
   </div>
@@ -35,9 +41,11 @@
       <thead>
         <tr>
           <th>ID</th>
+          <th>Location_ID</th>
           <th>Name</th>
           <th>Weather</th>
           <th>Temperature</th>
+          <th>X</th>
         </tr>
       </thead>
       <tbody>

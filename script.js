@@ -71,6 +71,11 @@ function logoutUser() {
   alert("User logged out successfully!");
 }
 
+function logOuterUserAfterResetPassword(){
+  localStorage.removeItem("token");
+  alert("Password changed successfully! Please log in again.")
+}
+
 // // Function to submit user selection
 // async function submitSelection() {
 //     const selection = document.getElementById('userSelection').value;
@@ -146,8 +151,13 @@ async function addLocation() {
       }),
       credentials: "include",
     });
-
+    if (!response.ok) {
+      throw new Error(`invalid city name ${location}`);
+    }
     const data = await response.json();
+    if (data.message){
+      throw new Error(data.message); 
+    }
     localStorage.setItem("cartData", JSON.stringify(data));
     // getAll();
     // localStorage.removeItem('cartData');
