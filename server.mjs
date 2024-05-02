@@ -1,14 +1,18 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const sqlite3 = require('sqlite3').verbose();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import sqlite3 from 'sqlite3';
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken';
+// const bcrypt = require('bcrypt');
+// const jwt = require('jsonwebtoken');
 
 const app = express();
-const PORT = 5501;
+const PORT = 3000;
+app.use(cors());
 const SECRET_KEY = 'your_secret_key'; // Change this to a secure random string
 
-const db = new sqlite3.Database('./data.db');
+const db = new sqlite3.Database('./db.sqlite');
 
 app.use(bodyParser.json());
 
@@ -17,7 +21,7 @@ function generateToken(user) {
   return jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: '1h' });
 }
 
-app.post('/api/register', async (req, res) => {
+app.post('/register', async (req, res) => {
   if (!req.body || !req.body.username || !req.body.password) {
     return res.status(400).json({ message: 'Invalid request body' });
   }
@@ -35,7 +39,7 @@ app.post('/api/register', async (req, res) => {
 });
 
 
-app.post('/api/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -73,7 +77,7 @@ function authenticate(req, res, next) {
 }
 
 // Get user-specific selections
-app.get('/api/selections', authenticate, (req, res) => {
+app.get('/selections', authenticate, (req, res) => {
   const userId = req.userId;
 
   db.all('SELECT * FROM user_selections WHERE user_id = ?', [userId], (err, rows) => {
@@ -86,7 +90,7 @@ app.get('/api/selections', authenticate, (req, res) => {
 });
 
 // Store user-specific selections
-app.post('/api/selections', authenticate, (req, res) => {
+app.post('/selections', authenticate, (req, res) => {
   const userId = req.userId;
   const { selection } = req.body;
 
@@ -104,7 +108,7 @@ app.post('/api/selections', authenticate, (req, res) => {
 });
 
 
-app.post('/api/user/:userId/locations/add', (req, res) => {
+app.post('/user/:userId/locations/add', (req, res) => {
   const userId = req.params.userId;
   const { itemId, quantity } = req.body;
 
@@ -117,7 +121,7 @@ app.post('/api/user/:userId/locations/add', (req, res) => {
 });
 
 // Retrieve items from a user's shopping cart
-app.get('/api/user/:userId/locations', (req, res) => {
+app.get('/user/:userId/locations', (req, res) => {
   const userId = req.params.userId;
 
   db.all("SELECT items.id, items.name, items.price, items.description, user_items.quantity FROM user_items INNER JOIN items ON user_items.item_id = items.id WHERE user_items.user_id = ?", [userId], function(err, rows) {

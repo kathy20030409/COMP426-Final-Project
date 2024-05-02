@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather List</title>
+  <link href="style.css" type="text/css" rel="stylesheet" />
+  <script defer src="script.js"></script>
+</head>
+
+<script>
+  if (!localStorage.getItem('token')) {
+    alert('You are not logged in!');
+    window.location.href = 'index.html'; // Redirect to login page
+  }
+</script>
+
+<body>
+  <a class="home" href="index.html" onclick="logoutUser()">Back to Home</a>
+  <p class="user" id="user">Username</p>
+  <p class="reset" id="reset"> &nbsp;<a href="resetPassword.html">Reset Password</a></p>
+
+  <div class="titleContain">
+    <h1 class="title">City Weather</h1>
+  </div>
+
+  <div class="select">
+    <label for="selection">Please enter a city:</label>
+    <input type="text" id="selection" required>
+    <button class="submitSelect" type="button" id="selection" onclick="addLocation()">Add Location</button>
+    <button class="submitSelect" id="getAll" onclick="getCart()">Get All</button>
+    <button class="submitSelect" id="orderDesc" onclick="sortDesc()">Sort Desc Loc</button>
+    <button class="submitSelect" id="orderAsc" onclick="sortAsc()">Sort Asc Loc</button>
+    <button class="submitSelect" id="orderDesc" onclick="sortDescTemp()">Sort Desc Temp</button>
+    <button class="submitSelect" id="orderAsc" onclick="sortAscTemp()">Sort Asc Temp</button>
+  </div>
+
+  <div class="locations">
+    <table id="cartTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Location_ID</th>
+          <th>Name</th>
+          <th>Weather</th>
+          <th>Temperature</th>
+          <th>X</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Table body will be dynamically populated -->
+      </tbody>
+    </table>
+  </div>
+</body>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded');
+    const userElement = document.getElementById("user");
+    if (userElement) {
+      setInterval(() => {
+        userElement.innerHTML = localStorage.getItem("username");
+      }, 1000);
+    } else {
+      console.error('Element with id "user" not found');
+    }
+  });
+</script>
+
+</html>

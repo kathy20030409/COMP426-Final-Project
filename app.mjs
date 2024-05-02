@@ -1,120 +1,154 @@
-import {User} from './user.mjs'
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const sqlite3 = require('sqlite3').verbose();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+import sqlite3 from 'sqlite3';
+import cors from 'cors';
+//import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { WeatherCard } from './weather.mjs';
+import { User } from "./user.mjs";
+import express from "express";
+import bodyParser from "body-parser";
+import { login, register } from "./authController.mjs";
+import { authenticate } from "./authMiddleware.mjs";
+import cookieParser from 'cookie-parser'; // Import cookie-parser
+
 
 const app = express();
-const PORT = 5501;
-const SECRET_KEY = 'your_secret_key'; // Change this to a secure random string
+const PORT = 3000;
 
-const db = new sqlite3.Database('./data.db');
+// CORS configuration
+const corsOptions = {
+    origin: ['http://127.0.0.1:5502', 'http://127.0.0.1:5501'],  // Allow this origin to send requests
+    credentials: true  // Allow credentials (cookies, authorization headers, etc.)
+};
 
+// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
+app.use(cookieParser())
 app.use(bodyParser.json());
 
-
-app.post('/api/register', async (req, res) => {
-    let ing = User.create(req.body);
-    if (!ing) {
-        res.status(400).json({ message: 'Invalid request body' });
-        return;
-    } 
-    res.json(ing.json());
+app.post("/register", async (req, res) => {
+  register(req, res);
 });
 
+app.post("/login", async (req, res) => {
+  login(req, res);
+});
 
-app.post('/api/login', async (req, res) => {
+app.put('/user/account', authenticate, async (req, res) => {
 
-    let ing = User.login(req.body);
+    let ing = await User.changePassword(req.body.userId, req.body.password);
 
     if (ing == 401) {
         res.status(401).json({ message: 'Invalid username or password' });
         return;
     } else if (ing == 500){
-        res.status(500).json({ message: 'Errors occurs during login' });
+        res.status(500).json({ message: 'Errors occur during changing password' });
         return;
-    } else if (ing == 400) {
+    } else if (ing== 400) {
         res.status(400).json({ message: 'Invalid request body' });
         return;
     }
-    res.json(ing.json());
+    res.status(200).json({message: 'Successfully reset password'});
 });
-
-function authenticate(req, res, next) {
-  const token = req.headers.authorization;
-  if (!token) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
-  jwt.verify(token, SECRET_KEY, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
-    req.userId = decoded.userId;
-    next();
-  });
-}
 
 // Get user-specific selections
-app.get('/api/selections', authenticate, (req, res) => {
-  const userId = req.userId;
-
-  db.all('SELECT * FROM user_selections WHERE user_id = ?', [userId], (err, rows) => {
-    if (err) {
-      res.status(500).send(err.message);
-    } else {
-      res.json(rows);
+app.get('/user/cart', authenticate, async (req, res) => {
+    const userId = req.body.userId;
+    let ing = await User.getLocations(userId);
+    if (ing == 400) {
+        res.status(400).json({ message: 'Invalid request body' });
+        return;
+    } else if (ing == 500){
+        res.status(500).json({ message: 'Errors occur getting locations' });
+        return;
     }
-  });
+    res.json(ing);
 });
 
-// Store user-specific selections
-app.post('/api/selections', authenticate, (req, res) => {
-  const userId = req.userId;
-  const { selection } = req.body;
+app.post('/user/cart', authenticate, async(req, res) => {
+    const userId = req.body.userId;
+    let ing = await User.addLocation(userId, req.body.location);
 
-  db.run(
-    'INSERT INTO user_selections (user_id, selection) VALUES (?, ?)',
-    [userId, selection],
-    function (err) {
-      if (err) {
-        res.status(500).send(err.message);
-      } else {
-        res.json({ message: 'Selection stored successfully' });
-      }
+  if (ing == 400) {
+    res.status(400).json({ message: "Invalid request body" });
+    return;
+  } else if (ing == 500) {
+    res.status(500).json({ error: "Failed to add item to cart" });
+    return;
+  }
+  res.json(ing);
+});
+
+app.delete('/user/cart', authenticate, async(req, res) => {
+    const userId = req.body.userId;
+    let ing = await User.deleteLocation(userId, req.body.location_id);
+
+    if (ing == 400){
+        res.status(400).json({ message: 'Invalid request body' });
+        return;
+    } else if (ing == 500){
+        res.status(500).json({ error: 'Failed to delete item in cart' });
+        return;
     }
-  );
+    res.json(ing);
 });
 
+app.get('/user/cart/order=desc', authenticate, async(req, res) => {
+    const userId = req.body.userId;
+    let ing = await User.sortLocations_desc(userId);
 
-app.post('/api/user/:userId/cart/add', (req, res) => {
-  const userId = req.params.userId;
-  const { itemId, quantity } = req.body;
-
-  db.run("INSERT INTO user_items (user_id, item_id, quantity) VALUES (?, ?, ?)", [userId, itemId, quantity], function(err) {
-      if (err) {
-          return res.status(500).json({ error: 'Failed to add item to cart' });
-      }
-      res.status(200).json({ message: 'Item added to cart successfully' });
-  });
+    if (ing == 400){
+        res.status(400).json({ message: 'Invalid request body' });
+        return;
+    } else if (ing == 500){
+        res.status(500).json({ error: 'Failed to sort items' });
+        return;
+    }
+    res.json(ing);
 });
 
-// Retrieve items from a user's shopping cart
-app.get('/api/user/:userId/cart', (req, res) => {
-  const userId = req.params.userId;
+app.get('/user/cart/order=asc', authenticate, async(req, res) => {
+    const userId = req.body.userId;
+    let ing = await User.sortLocations_asc(userId);
 
-  db.all("SELECT items.id, items.name, items.price, items.description, user_items.quantity FROM user_items INNER JOIN items ON user_items.item_id = items.id WHERE user_items.user_id = ?", [userId], function(err, rows) {
-      if (err) {
-          return res.status(500).json({ error: 'Failed to retrieve cart items' });
-      }
-      res.status(200).json(rows);
-  });
+    if (ing == 400){
+        res.status(400).json({ message: 'Invalid request body' });
+        return;
+    } else if (ing == 500){
+        res.status(500).json({ error: 'Failed to sort items' });
+        return;
+    }
+    res.json(ing);
 });
 
+app.get('/user/cart/order=desc_temp', authenticate, async(req, res) => {
+    const userId = req.body.userId;
+    let ing = await User.sortLocations_desc_temp(userId);
 
-// Start the server
+    if (ing == 400){
+        res.status(400).json({ message: 'Invalid request body' });
+        return;
+    } else if (ing == 500){
+        res.status(500).json({ error: 'Failed to sort items' });
+        return;
+    }
+    res.json(ing);
+});
+
+app.get('/user/cart/order=asc_temp', authenticate, async(req, res) => {
+    const userId = req.body.userId;
+    let ing = await User.sortLocations_asc_temp(userId);
+
+    if (ing == 400){
+        res.status(400).json({ message: 'Invalid request body' });
+        return;
+    } else if (ing == 500){
+        res.status(500).json({ error: 'Failed to sort items' });
+        return;
+    }
+    res.json(ing);
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
