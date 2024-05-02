@@ -6,7 +6,7 @@ The final project is an open-ended Weather Application that allows users to inte
 
 Our final project is a Weather Application that allows users to create an account, sign in, and choose cities to check the weather for (using a 3rd party API). Users may also choose to save their chosen cities for ease of access when they sign in again (using a db).
 
-**Link to presentation video:** [Insert Link Here](insert_link_here)
+**Link to presentation video:** [Final Project Video](https://youtu.be/PPiyQcOsZdc)
 
 ## Points Breakdown
 
